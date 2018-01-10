@@ -27,13 +27,6 @@ package cardsandwhatnot;
  *
  * @author William Gollinger
  */
-public class CardsAndWhatnot {
-
-  /**
-   * @param args the command line arguments
-   */
-  public static void main(String[] args) {
-    // TODO code application logic here
-  }
+public class GameEngine {
   
 }

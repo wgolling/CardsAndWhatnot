@@ -21,19 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package cardsandwhatnot;
+package cardsandwhatnot.io;
 
 /**
  *
  * @author William Gollinger
  */
-public class CardsAndWhatnot {
-
-  /**
-   * @param args the command line arguments
-   */
-  public static void main(String[] args) {
-    // TODO code application logic here
-  }
+public interface InputProcessor {
   
 }
