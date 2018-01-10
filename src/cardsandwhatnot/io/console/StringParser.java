@@ -21,12 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package cardsandwhatnot.io;
+package cardsandwhatnot.io.console;
 
 /**
  *
  * @author William Gollinger
  */
-public interface UserInterface {
+public class StringParser {
   
 }
