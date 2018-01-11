@@ -23,10 +23,26 @@
  */
 package cardsandwhatnot.lib;
 
+import java.util.*;
+
 /**
  *
  * @author William Gollinger
  */
 public class Hand {
-  
+ List<Card> cards; 
+ public Hand() {
+   cards = new ArrayList<>();
+ }
+ 
+ List<Card> getCards() {
+   return cards;
+ }
+ void addCards(List<Card> otherCards) {
+   
+ }
+ List<Card> removeCards(List<Card> cardsInHand) {
+   return null;
+ }
+ 
 }

@@ -28,5 +28,16 @@ package cardsandwhatnot.io;
  * @author William Gollinger
  */
 public interface MainMenu {
+  void displaySplash();
+  String promptContinue();
   
+  void displayGames();
+  String promptGame();
+  
+  void displayHumanPlayers();
+  void displayAIPlayers();
+  String promptPlayer();
+  String promptPassword();
+  
+  //...
 }

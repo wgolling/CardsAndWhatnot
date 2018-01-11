@@ -23,10 +23,39 @@
  */
 package cardsandwhatnot;
 
+import cardsandwhatnot.cardgames.*;
+
 /**
  *
  * @author William Gollinger
  */
 public class GameEngine {
+  static final int MIN_HEIGHT = 50;
+  static final int MIN_WIDTH = 50;
+  static final String DEFAULT_UI = "CONSOLE";
+  public int height;
+  public int width;
+  String uiType;
   
+  
+  public GameEngine(int height, int width, String uiType) {
+    setWindowSize(height, width);
+    this.uiType = DEFAULT_UI;
+    switch (uiType) {
+      case "CONSOLE": this.uiType = "CONSOLE";
+      break;
+    }
+  }
+  
+  String mainMenu() {return "";}
+  String playGame(CardGame game) {return "";}
+  int[] getWindowDimensions() {
+    int[] dimensions = {height, width};
+    return dimensions;
+  }
+  void setWindowSize(int height, int width) {
+    this.height = (height > MIN_HEIGHT) ? height : MIN_HEIGHT;
+    this.width = (width > MIN_WIDTH) ? width : MIN_WIDTH;
+  }
+  void setUIType(String ui) {this.uiType = ui;}
 }

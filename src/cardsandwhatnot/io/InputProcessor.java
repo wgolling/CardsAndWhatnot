@@ -28,5 +28,5 @@ package cardsandwhatnot.io;
  * @author William Gollinger
  */
 public interface InputProcessor {
-  
+  Object parseInput(Object input);
 }

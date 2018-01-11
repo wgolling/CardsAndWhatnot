@@ -21,12 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package cardsandwhatnot.cardgames;
+package cardsandwhatnot.lib;
 
 /**
  *
  * @author William Gollinger
  */
-public interface CardGameWithRounds {
+public class DisplayData {
+  String[] players; // Indexes players in turn order; String[0]
+  String[][] hands; // Indexes hands, first variable indexes players, second cards in hand
+  String[][] tableCards; // Indexes cards on table, first variable indexes piles
   
+  public DisplayData( ) {
+    //..
+  }
+  
+  //..
 }

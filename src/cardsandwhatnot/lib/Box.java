@@ -28,5 +28,8 @@ package cardsandwhatnot.lib;
  * @author William Gollinger
  */
 public interface Box {
-  
+  int getHeight();
+  int getWidth();
+  Object getContent();
+  void setConent(Object content);
 }

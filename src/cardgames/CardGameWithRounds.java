@@ -21,18 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package cardsandwhatnot.io;
-
-import cardsandwhatnot.lib.Box;
+package cardgames;
 
 /**
  *
  * @author William Gollinger
  */
-public interface GraphicsEngine {
-  void addLayer();
-  void addLayers(int amount);
-  void pinBoxToLayer(int layer, Box content, int x, int y);
-  void resetLayer(int layer);
-  void display();
+public interface CardGameWithRounds {
+  
 }

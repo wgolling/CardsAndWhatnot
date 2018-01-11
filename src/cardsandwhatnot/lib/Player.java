@@ -28,5 +28,9 @@ package cardsandwhatnot.lib;
  * @author William Gollinger
  */
 public interface Player {
-  
+  String getName();
+  boolean checkPassword(String other);
+  int getWins(String game);
+  Hand getHand();
+  String requestCard();
 }

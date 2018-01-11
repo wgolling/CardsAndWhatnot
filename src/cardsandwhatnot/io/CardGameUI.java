@@ -23,16 +23,17 @@
  */
 package cardsandwhatnot.io;
 
-import cardsandwhatnot.lib.Box;
-
 /**
  *
  * @author William Gollinger
  */
-public interface GraphicsEngine {
-  void addLayer();
-  void addLayers(int amount);
-  void pinBoxToLayer(int layer, Box content, int x, int y);
-  void resetLayer(int layer);
-  void display();
+public interface CardGameUI {
+  String getUIType();
+  String promptCard();
+  String promptRematch();
+  String promptContinue();
+  void displayCurrentState();
+  void dsiplayScores();
+  void dsiplayGameOver();
+  void dsiplayRoundOver();
 }

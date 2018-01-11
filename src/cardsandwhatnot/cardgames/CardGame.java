@@ -23,10 +23,50 @@
  */
 package cardsandwhatnot.cardgames;
 
+import cardsandwhatnot.lib.Player;
+
 /**
  *
  * @author William Gollinger
  */
 public interface CardGame {
+  Player[] getPlayers();
+  Player getCurrentPlayer();
+  
+  boolean hasRounds();
+  String getGameType(); //?
+  
+  boolean validatePlay(String card);
+  
+  void setupGame();
+  void resolveGame();
+  void setupRound();
+  boolean resolveRound();
+  void setupPlay();
+  void executePlay();
+  boolean resolvePlay();
+  
+  default void run() {
+    boolean gameOver = false;
+    setupGame();
+    while (!gameOver) {
+      if (hasRounds()) {
+        boolean roundOver = false;
+        setupRound();
+        while(!roundOver) {
+          setupPlay();
+          executePlay();
+          roundOver = resolvePlay();
+        }
+        gameOver = resolveRound();
+      } else {
+        setupPlay();
+        executePlay();
+        gameOver = resolvePlay();
+        
+      }
+    }
+    resolveGame();
+  }
   
 }
