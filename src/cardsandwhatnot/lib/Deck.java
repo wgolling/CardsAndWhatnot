@@ -29,7 +29,7 @@ import java.util.*;
  * @author William Gollinger
  */
 public interface Deck {
-  List<Card> freshDeck();
+  List<StandardCard> freshDeck();
   Map<Integer, Hand> deal(int players, int cardsEach);
   void sort(Comparator c);
   void shuffle();

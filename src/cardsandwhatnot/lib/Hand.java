@@ -30,18 +30,18 @@ import java.util.*;
  * @author William Gollinger
  */
 public class Hand {
- List<Card> cards; 
+ List<StandardCard> cards; 
  public Hand() {
    cards = new ArrayList<>();
  }
  
- List<Card> getCards() {
+ List<StandardCard> getCards() {
    return cards;
  }
- void addCards(List<Card> otherCards) {
+ void addCards(List<StandardCard> otherCards) {
    
  }
- List<Card> removeCards(List<Card> cardsInHand) {
+ List<StandardCard> removeCards(List<StandardCard> cardsInHand) {
    return null;
  }
  

@@ -21,12 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package lib;
+package cardsandwhatnot.lib;
 
 /**
  *
  * @author William Gollinger
  */
-public interface Box {
-  
+public interface valueTextEnum {
+  int value();
+  String text();
 }

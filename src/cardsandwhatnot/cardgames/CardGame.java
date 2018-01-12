@@ -37,19 +37,25 @@ public class CardGame {
   Deck gameDeck;
   boolean roundOver;
   boolean gameOver;
+  DisplayData data; // A data package to send to the UI.
   
   public CardGame(List<Player> players) {
     name = "BLANK";
     this.players = players;
     currentPlayer = 0;
-    gameDeck = null; // Should be set by game.
-    roundOver = (gameOver = false); // If your game has no rounds, set roundOver = true in your initializer.
+    gameDeck = null; // Should be set by game; e.g. Hearts and Uno use different decks.
+    roundOver = (gameOver = false); 
+    data = new DisplayData();
   }
   @Override
   public String toString() {return name;}
   List<Player> getPlayers() {return players;}
   int getCurrentPlayer() {return currentPlayer;}
-  // To write new game, just have to override these methods.
+  /* 
+  * To write new CardGame, just have to override the methods below as needed.
+  * If your game has no rounds then set roundOver = true in your initializer,
+  *   and leave setup/resolveRound() blank.
+  */  
   private void setupGame(){}
   private void resolveGame(){}
   private void setupRound(){}
@@ -57,6 +63,7 @@ public class CardGame {
   private void setupPlay(){}
   private void executePlay(){}
   private void resolvePlay(){}
+  // The CardGame is then played by calling its run() method. 
   public void run() {
     setupGame();
     while (!gameOver) {
@@ -65,7 +72,7 @@ public class CardGame {
         setupPlay();
         executePlay();
         resolvePlay();
-      } while(!roundOver); // if roundOver always true, each "Round" only has one Play
+      } while(!roundOver); // If roundOver always true, each "Round" only has one Play.
       resolveRound();
     }
     resolveGame(); 

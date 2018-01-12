@@ -27,6 +27,22 @@ package cardsandwhatnot.lib;
  *
  * @author William Gollinger
  */
-public class Card {
+
+/*
+* TODO:
+* - generalize Suit and Rank to allow for non-standard cards
+* - make as many default methods as possible
+*/
+public interface Card extends Comparable<Card> {
+  
+  
+  public valueTextEnum getRank();
+  public valueTextEnum getSuit();
+  @Override
+  public boolean equals(Object other);
+  @Override
+  public int hashCode();
+  @Override
+  public String toString();
   
 }
