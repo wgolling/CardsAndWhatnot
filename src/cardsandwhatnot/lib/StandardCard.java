@@ -29,10 +29,10 @@ package cardsandwhatnot.lib;
  */
 public class StandardCard implements Card {
   public enum Suit implements valueTextEnum {
-    DIAMONDS (1, "Diamonds"),
-    CLUBS    (2, "Clubs"),
-    HEARTS   (3, "Hearts"),
-    SPADES   (4, "Spades");
+    CLUBS    (1, "Clubs"),
+    DIAMONDS (2, "Diamonds"),
+    SPADES   (3, "Spades"),
+    HEARTS   (4, "Hearts");
     
     private final int value;
     private final String text;
