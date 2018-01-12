@@ -23,6 +23,9 @@
  */
 package cardsandwhatnot.lib;
 
+import java.util.List;
+import java.util.Arrays;
+import java.util.Comparator;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -34,8 +37,7 @@ import static org.junit.Assert.*;
  *
  * @author William Gollinger
  */
-public class StandardCardTest {
-  
+public class HandTest {
   StandardCard ACE_OF_SPADES = new StandardCard(StandardCard.Rank.ACE,
                                                 StandardCard.Suit.SPADES);
   StandardCard TWO_OF_CLUBS = new StandardCard(StandardCard.Rank.TWO,
@@ -43,7 +45,7 @@ public class StandardCardTest {
   StandardCard QUEEN_OF_HEARTS = new StandardCard(StandardCard.Rank.QUEEN,
                                                   StandardCard.Suit.HEARTS);
   
-  public StandardCardTest() {
+  public HandTest() {
   }
   
   @BeforeClass
@@ -56,6 +58,7 @@ public class StandardCardTest {
   
   @Before
   public void setUp() {
+    Hand hand = new Hand(Arrays.asList(ACE_OF_SPADES, TWO_OF_CLUBS, QUEEN_OF_HEARTS));
   }
   
   @After
@@ -63,77 +66,74 @@ public class StandardCardTest {
   }
 
   /**
-   * Test of getRank method, of class StandardCard.
+   * Test of getCards method, of class Hand.
    */
   @Test
-  public void testGetRank() {
-    System.out.println("getRank");
-    StandardCard.Rank expResult = StandardCard.Rank.ACE;
-    StandardCard.Rank result = ACE_OF_SPADES.getRank();
+  public void testGetCards() {
+    System.out.println("getCards");
+    Hand instance = new Hand(Arrays.asList(ACE_OF_SPADES, TWO_OF_CLUBS, QUEEN_OF_HEARTS));
+    StandardCard.Suit expResult = StandardCard.Suit.CLUBS;
+    StandardCard.Suit result = (StandardCard.Suit)instance.getCards().get(1).getSuit();
     assertEquals(expResult, result);
   }
 
   /**
-   * Test of getSuit method, of class StandardCard.
+   * Test of addCard method, of class Hand.
    */
   @Test
-  public void testGetSuit() {
-    System.out.println("getSuit");
-    StandardCard.Suit expResult = StandardCard.Suit.SPADES;
-    StandardCard.Suit result = ACE_OF_SPADES.getSuit();
+  public void testAddCard() {
+    System.out.println("addCard");
+    Hand instance = new Hand(Arrays.asList(ACE_OF_SPADES));
+    instance.addCard(QUEEN_OF_HEARTS);
+    StandardCard.Suit expResult = StandardCard.Suit.HEARTS;
+    StandardCard.Suit result = (StandardCard.Suit)instance.getCards().get(1).getSuit();
     assertEquals(expResult, result);
   }
 
   /**
-   * Test of toString method, of class StandardCard.
+   * Test of addCards method, of class Hand.
    */
   @Test
-  public void testToString() {
-    System.out.println("toString");
-    String expResult = "Ace of Spades";
-    String result = ACE_OF_SPADES.toString();
+  public void testAddCards() {
+    System.out.println("addCards");
+    List<Card> otherCards = Arrays.asList(QUEEN_OF_HEARTS, TWO_OF_CLUBS);
+    Hand instance = new Hand(Arrays.asList(ACE_OF_SPADES));
+    instance.addCards(otherCards);
+    StandardCard.Suit expResult = StandardCard.Suit.CLUBS;
+    StandardCard.Suit result = (StandardCard.Suit)instance.getCards().get(2).getSuit();
     assertEquals(expResult, result);
   }
 
   /**
-   * Test of equals method, of class StandardCard.
+   * Test of removeCards method, of class Hand.
    */
   @Test
-  public void testEquals() {
-    System.out.println("equals");
-    boolean expResult = false;
-    boolean result = ACE_OF_SPADES.equals(QUEEN_OF_HEARTS);
+  public void testRemoveCards() {
+    System.out.println("removeCards");
+    Hand instance = new Hand(Arrays.asList(ACE_OF_SPADES, TWO_OF_CLUBS, QUEEN_OF_HEARTS));
+    List<Card> subCards = Arrays.asList(QUEEN_OF_HEARTS, ACE_OF_SPADES);
+    boolean expResult = true;
+    boolean result = instance.removeCards(subCards);
     assertEquals(expResult, result);
-    Object same = new StandardCard(StandardCard.Rank.ACE, StandardCard.Suit.SPADES);
-    expResult = true;
-    result = ACE_OF_SPADES.equals(same);
+    StandardCard.Suit suit = StandardCard.Suit.CLUBS;
+    StandardCard.Suit test = (StandardCard.Suit)instance.getCards().get(0).getSuit();
+    assertEquals(suit, test);
+    expResult = false;
+    result = instance.removeCards(subCards);
     assertEquals(expResult, result);
-  }
+    }
 
   /**
-   * Test of hashCode method, of class StandardCard.
+   * Test of sort method, of class Hand.
    */
   @Test
-  public void testHashCode() {
-    System.out.println("hashCode");
-    int expResult = 40;
-    int result = ACE_OF_SPADES.hashCode();
+  public void testSort_0args() {
+    System.out.println("sort");
+    Hand instance = new Hand(Arrays.asList(ACE_OF_SPADES, TWO_OF_CLUBS, QUEEN_OF_HEARTS));
+    instance.sort();
+    StandardCard.Suit expResult = StandardCard.Suit.CLUBS;
+    StandardCard.Suit result = (StandardCard.Suit)instance.getCards().get(0).getSuit();
     assertEquals(expResult, result);
-  }
-
-  /**
-   * Test of compareTo method, of class StandardCard.
-   */
-  @Test
-  public void testCompareTo() {
-    System.out.println("compareTo");
-    int result = ACE_OF_SPADES.compareTo(TWO_OF_CLUBS);
-    assert(result > 0);
-    StandardCard same = new StandardCard(StandardCard.Rank.ACE, StandardCard.Suit.SPADES);
-    result = ACE_OF_SPADES.compareTo(same);
-    assert(result == 0);
-    result = ACE_OF_SPADES.compareTo(QUEEN_OF_HEARTS);
-    assert(result < 0);
   }
   
 }

@@ -24,25 +24,48 @@
 package cardsandwhatnot.lib;
 
 import java.util.*;
+import java.util.stream.*;
+import java.lang.*;
 
 /**
  *
  * @author William Gollinger
  */
 public class Hand {
- List<StandardCard> cards; 
- public Hand() {
-   cards = new ArrayList<>();
- }
- 
- List<StandardCard> getCards() {
-   return cards;
- }
- void addCards(List<StandardCard> otherCards) {
-   
- }
- List<StandardCard> removeCards(List<StandardCard> cardsInHand) {
-   return null;
- }
+  List<Card> cards; 
+
+  public Hand() {
+    cards = new ArrayList<>();
+  }
+  public Hand(List<Card> cards) { // Have to be careful about Array.asList() not returning ArrayList
+    this.cards = new ArrayList<>(cards);
+  }
+
+  List<Card> getCards() {
+    return cards;
+  }
+  void addCard(Card card) {
+    cards.add(card);
+  }
+  void addCards(List<Card> otherCards) {
+    for (Card card : otherCards) {
+      cards.add(card);
+    }
+  }
+  // For removeCards it is important that subCards be a subset of cards.
+  // It will return null otherwise.
+  boolean removeCards(List<Card> subCards) {
+    List<Card> cardsCopy = cards;
+    for (Card card : subCards) {
+      if (!cardsCopy.remove(card)) {
+        return false;
+      }
+    }
+    cards = cardsCopy;
+    return true;
+  }
+  public void sort() {
+    Collections.sort(cards);
+  }
  
 }
