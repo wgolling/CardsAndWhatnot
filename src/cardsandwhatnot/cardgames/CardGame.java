@@ -23,50 +23,52 @@
  */
 package cardsandwhatnot.cardgames;
 
-import cardsandwhatnot.lib.Player;
+import java.util.*;
+import cardsandwhatnot.lib.*;
 
 /**
  *
  * @author William Gollinger
  */
-public interface CardGame {
-  Player[] getPlayers();
-  Player getCurrentPlayer();
+public class CardGame {
+  String name;
+  List<Player> players;
+  int currentPlayer;
+  Deck gameDeck;
+  boolean roundOver;
+  boolean gameOver;
   
-  boolean hasRounds();
-  String getGameType(); //?
-  
-  boolean validatePlay(String card);
-  
-  void setupGame();
-  void resolveGame();
-  void setupRound();
-  boolean resolveRound();
-  void setupPlay();
-  void executePlay();
-  boolean resolvePlay();
-  
-  default void run() {
-    boolean gameOver = false;
+  public CardGame(List<Player> players) {
+    name = "BLANK";
+    this.players = players;
+    currentPlayer = 0;
+    gameDeck = null; // Should be set by game.
+    roundOver = (gameOver = false); // If your game has no rounds, set roundOver = true in your initializer.
+  }
+  @Override
+  public String toString() {return name;}
+  List<Player> getPlayers() {return players;}
+  int getCurrentPlayer() {return currentPlayer;}
+  // To write new game, just have to override these methods.
+  private void setupGame(){}
+  private void resolveGame(){}
+  private void setupRound(){}
+  private void resolveRound(){}
+  private void setupPlay(){}
+  private void executePlay(){}
+  private void resolvePlay(){}
+  public void run() {
     setupGame();
     while (!gameOver) {
-      if (hasRounds()) {
-        boolean roundOver = false;
-        setupRound();
-        while(!roundOver) {
-          setupPlay();
-          executePlay();
-          roundOver = resolvePlay();
-        }
-        gameOver = resolveRound();
-      } else {
+      setupRound();
+      do {
         setupPlay();
         executePlay();
-        gameOver = resolvePlay();
-        
-      }
+        resolvePlay();
+      } while(!roundOver); // if roundOver always true, each "Round" only has one Play
+      resolveRound();
     }
-    resolveGame();
+    resolveGame(); 
   }
   
 }
