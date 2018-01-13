@@ -116,7 +116,7 @@ public class HandTest {
     boolean result = instance.removeCards(subCards);
     assertEquals(expResult, result);
     StandardCard.Suit suit = StandardCard.Suit.CLUBS;
-    StandardCard.Suit test = (StandardCard.Suit)instance.getCards().get(0).getSuit();
+    ValueTextEnum test = instance.getCards().get(0).getSuit();
     assertEquals(suit, test);
     expResult = false;
     result = instance.removeCards(subCards);
@@ -127,7 +127,7 @@ public class HandTest {
    * Test of sort method, of class Hand.
    */
   @Test
-  public void testSort_0args() {
+  public void testSort() {
     System.out.println("sort");
     Hand instance = new Hand(Arrays.asList(ACE_OF_SPADES, TWO_OF_CLUBS, QUEEN_OF_HEARTS));
     instance.sort();

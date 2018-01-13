@@ -24,8 +24,6 @@
 package cardsandwhatnot.lib;
 
 import java.util.*;
-import java.util.stream.*;
-import java.lang.*;
 
 /**
  *
@@ -41,7 +39,7 @@ public class Hand {
     this.cards = new ArrayList<>(cards);
   }
 
-  List<Card> getCards() {
+  public List<Card> getCards() {
     return cards;
   }
   void addCard(Card card) {

@@ -23,10 +23,70 @@
  */
 package cardsandwhatnot.lib;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 /**
  *
  * @author William Gollinger
  */
-public class StandardDeck {
+public class StandardDeck extends Hand implements Deck {
+    
+  // inherits from Hand: List<Card> cards
   
+  public StandardDeck() {
+    cards = new ArrayList<>();
+  }
+  
+  // implementing Deck 
+  // methods implemented by Hand: sort(), get/addCard(s)
+  @Override
+  public Map<Integer, Hand> deal(int players, int cardsEach)
+           throws IllegalArgumentException 
+  {
+    // code is from Oracle tutorial Default Methods
+    // used Hands instead of Decks
+    int cardsDealt = players * cardsEach;
+    int sizeOfDeck = cards.size();
+    if (cardsDealt > sizeOfDeck) {
+      throw new IllegalArgumentException(
+        "Number of players (" + players +
+        ") times number of cards to be dealt (" + cardsEach +
+        ") is greater than the number of cards in the deck (" +
+        sizeOfDeck + ").");
+    }
+    
+    // sets up the correspondance "Player -> Hand"
+    Map<Integer, List<Card>> dealtDeck = cards
+            .stream()
+            .collect(
+              Collectors.groupingBy(
+                card -> {
+                  int cardIndex = cards.indexOf(card);
+                  if (cardIndex >= cardsDealt) return (players + 1);
+                  else return (cardIndex % players) + 1;
+                }));
+    Map<Integer, Hand> mapToReturn = new HashMap<>();
+    
+    // turns "hands" into genuine Hands
+    for (int i = 1; i <= (players + 1); i++) {
+      Hand currentHand = new Hand();
+      currentHand.addCards(dealtDeck.get(i));
+      mapToReturn.put(i, currentHand);
+    }
+    return mapToReturn;
+  }
+  @Override
+  public void shuffle(){
+    Collections.shuffle(cards);
+  }
+  @Override
+  public void refresh() { 
+    for (StandardCard.Suit suit : StandardCard.Suit.values()) {
+      for (StandardCard.Rank rank : StandardCard.Rank.values() ) {
+        cards = new ArrayList<>();
+        addCard(new StandardCard(rank, suit));
+      }
+    }
+  }
 }

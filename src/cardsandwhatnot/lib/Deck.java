@@ -29,8 +29,9 @@ import java.util.*;
  * @author William Gollinger
  */
 public interface Deck {
-  List<StandardCard> freshDeck();
-  Map<Integer, Hand> deal(int players, int cardsEach);
-  void sort(Comparator c);
-  void shuffle();
+  public List<Card> getCards();
+  public Map<Integer, Hand> deal(int players, int cardsEach);
+  public void sort();
+  public void shuffle();
+  public void refresh(); // restores to factory settings
 }

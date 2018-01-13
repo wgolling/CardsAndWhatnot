@@ -27,7 +27,7 @@ package cardsandwhatnot.lib;
  *
  * @author William Gollinger
  */
-public interface valueTextEnum {
+public interface ValueTextEnum {
   int value();
   String text();
 }

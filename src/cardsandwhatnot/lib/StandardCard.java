@@ -28,7 +28,7 @@ package cardsandwhatnot.lib;
  * @author William Gollinger
  */
 public class StandardCard implements Card {
-  public enum Suit implements valueTextEnum {
+  public enum Suit implements ValueTextEnum {
     CLUBS    (1, "Clubs"),
     DIAMONDS (2, "Diamonds"),
     SPADES   (3, "Spades"),
@@ -49,7 +49,7 @@ public class StandardCard implements Card {
       return text;
     }
   }
-  public enum Rank implements valueTextEnum {
+  public enum Rank implements ValueTextEnum {
     TWO (2, "Two"),  
     THREE (3, "Three"),
     FOUR (4, "Four"),

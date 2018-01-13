@@ -36,8 +36,8 @@ package cardsandwhatnot.lib;
 public interface Card extends Comparable<Card> {
   
   
-  public valueTextEnum getRank();
-  public valueTextEnum getSuit();
+  public ValueTextEnum getRank();
+  public ValueTextEnum getSuit();
   @Override
   public boolean equals(Object other);
   @Override
