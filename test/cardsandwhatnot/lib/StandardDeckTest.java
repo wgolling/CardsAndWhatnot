@@ -75,6 +75,8 @@ public class StandardDeckTest {
     Card expResult = TWO_OF_CLUBS;
     Map<Integer, Hand> result = instance.deal(players, cardsEach);
     assert(expResult.equals(result.get(1).getCards().get(0)));
+    assertEquals(10, result.get(2).size());
+    assertNull(result.get(3));
     expResult = new StandardCard(StandardCard.Rank.EIGHT, StandardCard.Suit.DIAMONDS);
     assert(expResult.equals(result.get(2).getCards().get(9)));
   }
@@ -95,8 +97,7 @@ public class StandardDeckTest {
   public void testRefresh() {
     System.out.println("refresh");
     StandardDeck instance = testDeck;
-    testDeck.removeCards(Arrays.asList(TWO_OF_CLUBS));
-    Card card = testDeck.deal(1,1).get(1).getCards().get(0);
+    testDeck.removeCards(Arrays.asList(TWO_OF_CLUBS));    
     Card expResult = new StandardCard(StandardCard.Rank.THREE, StandardCard.Suit.CLUBS);
     Card result = testDeck.getCards().get(0);
     assertEquals(expResult, result);

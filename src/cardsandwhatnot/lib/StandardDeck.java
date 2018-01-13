@@ -70,10 +70,14 @@ public class StandardDeck extends Hand implements Deck {
     Map<Integer, Hand> mapToReturn = new HashMap<>();
     
     // turns "hands" into genuine Hands
-    for (int i = 1; i <= (players + 1); i++) {
+    for (int i = 1; i <= players; i++) {
       Hand currentHand = new Hand();
       currentHand.addCards(dealtDeck.get(i));
       mapToReturn.put(i, currentHand);
+    }
+    // remove the cards you just dealt
+    for (int i = cardsDealt - 1; i>=0; i--) {
+      cards.remove(i);
     }
     return mapToReturn;
   }

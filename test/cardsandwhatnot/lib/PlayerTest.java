@@ -106,11 +106,11 @@ public class PlayerTest {
   public void testGetHand() {
     System.out.println("getHand");
     Player instance = testPlayer;
-    Hand expResult = null;
-    Hand result = instance.getHand();
-    assertEquals(expResult, result);
-    // TODO review the generated test code and remove the default call to fail.
-    fail("The test case is a prototype.");
+    Card TWO_OF_CLUBS = new StandardCard(StandardCard.Rank.TWO, StandardCard.Suit.CLUBS);
+    testPlayer.getHand().addCard(TWO_OF_CLUBS);
+    Card expResult = TWO_OF_CLUBS;
+    Card result = instance.getHand().getCards().get(0);
+    assert(expResult.equals(result));
   }
 
   /**
