@@ -42,6 +42,9 @@ public class Hand {
   public List<Card> getCards() {
     return cards;
   }
+  public int size() {
+    return cards.size();
+  }
   void addCard(Card card) {
     cards.add(card);
   }

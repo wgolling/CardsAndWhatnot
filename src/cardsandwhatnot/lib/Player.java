@@ -23,14 +23,56 @@
  */
 package cardsandwhatnot.lib;
 
+import java.util.*;
+
 /**
  *
  * @author William Gollinger
  */
-public interface Player {
-  String getName();
-  boolean checkPassword(String other);
-  int getWins(String game);
-  Hand getHand();
-  String requestCard();
+public class Player {
+  String name;
+  String password;  
+  boolean isHuman;
+  Map<String, Integer> wins;
+  Hand hand;
+  
+  public Player(String name, String password, boolean isHuman) {
+    this.name = name;
+    this.password = password;
+    this.isHuman = isHuman;
+    wins = new HashMap<>();
+    hand = new Hand();
+  }
+  // if a player's stats are on file, construct with optional wins parameter
+  public Player(String name, String password, boolean isHuman, 
+           Map<String, Integer> wins) {
+    this(name, password, isHuman);
+    this.wins = wins;
+  }
+  
+  public String getName() {
+    return name;
+  }
+  public boolean isHuman() {
+    return isHuman;
+  }
+  public void winGame(String gameName) {
+    if (wins.get(gameName) == null) {
+      wins.put(gameName, 1);
+    } else {
+      wins.put(gameName, wins.get(gameName) + 1);
+    }
+  }
+  public int getWins(String gameName) {
+    return (wins.get(gameName) == null) ? 0 : wins.get(gameName);
+  }
+  public Hand getHand() {
+    return hand;
+  }
+  public int drawCards(Deck deck, int amount) {
+    int drawAmount = Math.min(amount, deck.size());
+    Hand newHand = deck.deal(1, drawAmount).get(1);
+    hand.addCards(newHand.getCards());
+    return drawAmount;
+  }
 }

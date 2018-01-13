@@ -30,7 +30,8 @@ import java.util.*;
  */
 public interface Deck {
   public List<Card> getCards();
-  public Map<Integer, Hand> deal(int players, int cardsEach);
+  public int size();
+  public Map<Integer, Hand> deal(int players, int cardsEach); // indexing starts at 1
   public void sort();
   public void shuffle();
   public void refresh(); // restores to factory settings

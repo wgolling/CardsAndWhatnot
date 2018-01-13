@@ -32,6 +32,7 @@ import cardsandwhatnot.lib.*;
  */
 public class CardGame {
   String name;
+  String cardType;
   List<Player> players;
   int currentPlayer;
   Deck gameDeck;
@@ -41,6 +42,7 @@ public class CardGame {
   
   public CardGame(List<Player> players) {
     name = "BLANK";
+    cardType = "BLANK";
     this.players = players;
     currentPlayer = 0;
     gameDeck = null; // Should be set by game; e.g. Hearts and Uno use different decks.
@@ -51,6 +53,16 @@ public class CardGame {
   public String toString() {return name;}
   List<Player> getPlayers() {return players;}
   int getCurrentPlayer() {return currentPlayer;}
+  Card requestCard(Player player) {
+    // if human:
+    //   Card card = UI.promptCard(cardType);
+    //   while !validatePlay(card) {
+    //     card = UI.promptCard(cardType, "Invalidplay");
+    //   }
+    // if AI:
+    //   player.runScript(name);
+    return null;
+  }
   /* 
   * To write new CardGame, just have to override the methods below as needed.
   * If your game has no rounds then set roundOver = true in your initializer,
