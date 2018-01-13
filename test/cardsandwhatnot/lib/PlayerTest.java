@@ -29,6 +29,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import java.util.*;
 
 /**
  *
@@ -38,7 +39,6 @@ public class PlayerTest {
   Player testPlayer;
   
   public PlayerTest() {
-    
   }
   
   @BeforeClass
@@ -51,6 +51,7 @@ public class PlayerTest {
   
   @Before
   public void setUp() {
+    testPlayer = new Player("TEST", "PASSWORD", true);
   }
   
   @After
@@ -63,12 +64,10 @@ public class PlayerTest {
   @Test
   public void testGetName() {
     System.out.println("getName");
-    Player instance = null;
-    String expResult = "";
+    Player instance = testPlayer;
+    String expResult = "TEST";
     String result = instance.getName();
     assertEquals(expResult, result);
-    // TODO review the generated test code and remove the default call to fail.
-    fail("The test case is a prototype.");
   }
 
   /**
@@ -77,40 +76,27 @@ public class PlayerTest {
   @Test
   public void testIsHuman() {
     System.out.println("isHuman");
-    Player instance = null;
-    boolean expResult = false;
-    boolean result = instance.isHuman();
-    assertEquals(expResult, result);
-    // TODO review the generated test code and remove the default call to fail.
-    fail("The test case is a prototype.");
+    Player instance = testPlayer;
+    assert(instance.isHuman());
   }
 
   /**
    * Test of winGame method, of class Player.
    */
   @Test
-  public void testWinGame() {
+  public void testWinGame_GetWins() {
     System.out.println("winGame");
-    String gameName = "";
-    Player instance = null;
+    String gameName = "TESTGAME";
+    Player instance = testPlayer;
     instance.winGame(gameName);
-    // TODO review the generated test code and remove the default call to fail.
-    fail("The test case is a prototype.");
-  }
-
-  /**
-   * Test of getWins method, of class Player.
-   */
-  @Test
-  public void testGetWins() {
-    System.out.println("getWins");
-    String gameName = "";
-    Player instance = null;
-    int expResult = 0;
+    int expResult = 1;
     int result = instance.getWins(gameName);
     assertEquals(expResult, result);
-    // TODO review the generated test code and remove the default call to fail.
-    fail("The test case is a prototype.");
+    assertEquals(0, instance.getWins("BUTT"));
+    Map<String, Integer> wins = new HashMap<>();
+    wins.put("BUTT", 7);
+    Player testPlayer2 = new Player("TEST2", "PASS2", true, wins);
+    assertEquals(7, testPlayer2.getWins("BUTT"));
   }
 
   /**
@@ -119,12 +105,27 @@ public class PlayerTest {
   @Test
   public void testGetHand() {
     System.out.println("getHand");
-    Player instance = null;
+    Player instance = testPlayer;
     Hand expResult = null;
     Hand result = instance.getHand();
     assertEquals(expResult, result);
     // TODO review the generated test code and remove the default call to fail.
     fail("The test case is a prototype.");
+  }
+
+  /**
+   * Test of drawCards method, of class Player.
+   */
+  @Test
+  public void testDrawCards() {
+    System.out.println("drawCards");
+    Deck deck = new StandardDeck();
+    Player instance = testPlayer;
+    int expResult = 7;
+    int result = instance.drawCards(deck, 7);
+    assertEquals(expResult, result);
+    result = testPlayer.drawCards(deck, 52);
+    assertEquals(52-7, result);
   }
   
 }

@@ -30,6 +30,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import java.util.*;
 
 /**
  *
@@ -37,7 +38,12 @@ import static org.junit.Assert.*;
  */
 public class StandardDeckTest {
   
+  StandardDeck testDeck;
+  StandardCard TWO_OF_CLUBS;
+  
   public StandardDeckTest() {
+    testDeck = new StandardDeck();
+    TWO_OF_CLUBS = new StandardCard(StandardCard.Rank.TWO, StandardCard.Suit.CLUBS);
   }
   
   @BeforeClass
@@ -50,6 +56,7 @@ public class StandardDeckTest {
   
   @Before
   public void setUp() {
+    testDeck.refresh();
   }
   
   @After
@@ -62,14 +69,14 @@ public class StandardDeckTest {
   @Test
   public void testDeal() {
     System.out.println("deal");
-    int players = 0;
-    int cardsEach = 0;
-    StandardDeck instance = new StandardDeck();
-    Map<Integer, Hand> expResult = null;
+    int players = 2;
+    int cardsEach = 10;
+    StandardDeck instance = testDeck;
+    Card expResult = TWO_OF_CLUBS;
     Map<Integer, Hand> result = instance.deal(players, cardsEach);
-    assertEquals(expResult, result);
-    // TODO review the generated test code and remove the default call to fail.
-    fail("The test case is a prototype.");
+    assert(expResult.equals(result.get(1).getCards().get(0)));
+    expResult = new StandardCard(StandardCard.Rank.EIGHT, StandardCard.Suit.DIAMONDS);
+    assert(expResult.equals(result.get(2).getCards().get(9)));
   }
 
   /**
@@ -78,10 +85,7 @@ public class StandardDeckTest {
   @Test
   public void testShuffle() {
     System.out.println("shuffle");
-    StandardDeck instance = new StandardDeck();
-    instance.shuffle();
-    // TODO review the generated test code and remove the default call to fail.
-    fail("The test case is a prototype.");
+    // can't really test something random
   }
 
   /**
@@ -90,10 +94,15 @@ public class StandardDeckTest {
   @Test
   public void testRefresh() {
     System.out.println("refresh");
-    StandardDeck instance = new StandardDeck();
+    StandardDeck instance = testDeck;
+    testDeck.removeCards(Arrays.asList(TWO_OF_CLUBS));
+    Card card = testDeck.deal(1,1).get(1).getCards().get(0);
+    Card expResult = new StandardCard(StandardCard.Rank.THREE, StandardCard.Suit.CLUBS);
+    Card result = testDeck.getCards().get(0);
+    assertEquals(expResult, result);
     instance.refresh();
-    // TODO review the generated test code and remove the default call to fail.
-    fail("The test case is a prototype.");
+    result = testDeck.getCards().get(0);
+    assertEquals(TWO_OF_CLUBS, result);
   }
   
 }

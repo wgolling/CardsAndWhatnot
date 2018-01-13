@@ -36,6 +36,7 @@ public class StandardDeck extends Hand implements Deck {
   
   public StandardDeck() {
     cards = new ArrayList<>();
+    refresh();
   }
   
   // implementing Deck 
@@ -82,9 +83,9 @@ public class StandardDeck extends Hand implements Deck {
   }
   @Override
   public void refresh() { 
+    cards = new ArrayList<>();
     for (StandardCard.Suit suit : StandardCard.Suit.values()) {
       for (StandardCard.Rank rank : StandardCard.Rank.values() ) {
-        cards = new ArrayList<>();
         addCard(new StandardCard(rank, suit));
       }
     }
