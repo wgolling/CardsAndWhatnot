@@ -28,5 +28,5 @@ package cardsandwhatnot.cardgames;
  * @author William Gollinger
  */
 public class HeartsUI {
-  
+  public HeartsUI(){}
 }

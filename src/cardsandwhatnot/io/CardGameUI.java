@@ -23,17 +23,21 @@
  */
 package cardsandwhatnot.io;
 
+import cardsandwhatnot.lib.*;
 /**
  *
  * @author William Gollinger
  */
+// TODO: turn into class
 public interface CardGameUI {
   String getUIType();
-  String promptCard();
+  Card promptCard();
+  Card promptCard(String message);
   String promptRematch();
   String promptContinue();
+  void setDisplayData(DisplayData data);
   void displayCurrentState();
-  void dsiplayScores();
-  void dsiplayGameOver();
-  void dsiplayRoundOver();
+  void displayScores();
+  void displayGameOver();
+  void displayRoundOver();
 }

@@ -24,6 +24,7 @@
 package cardsandwhatnot;
 
 import cardsandwhatnot.cardgames.*;
+import cardsandwhatnot.io.*;
 
 /**
  *
@@ -48,7 +49,14 @@ public class GameEngine {
   }
   
   String mainMenu() {return "";}
-  String playGame(CardGame game) {return "";}
+  String playGame(CardGame game) {
+    switch (game.getCardType()) {
+      case "BLANK" : break;
+      case "FOUR" : HeartsUI UI = new HeartsUI();   
+    }
+    
+    return "";
+  }
   int[] getWindowDimensions() {
     int[] dimensions = {height, width};
     return dimensions;

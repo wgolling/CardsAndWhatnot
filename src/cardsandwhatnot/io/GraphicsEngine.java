@@ -23,8 +23,6 @@
  */
 package cardsandwhatnot.io;
 
-import cardsandwhatnot.lib.Box;
-
 /**
  *
  * @author William Gollinger
@@ -32,7 +30,7 @@ import cardsandwhatnot.lib.Box;
 public interface GraphicsEngine {
   void addLayer();
   void addLayers(int amount);
-  void pinBoxToLayer(int layer, Box content, int x, int y);
+  void pinBoxToLayer(int layer, Object content, int x, int y);
   void resetLayer(int layer);
   void display();
 }

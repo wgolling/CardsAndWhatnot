@@ -29,4 +29,7 @@ package cardsandwhatnot.io.console;
  */
 public class ConsoleGraphicsEngine {
   
+  public ConsoleGraphicsEngine(int windowHeight, int windowWidth) {
+    
+  }
 }

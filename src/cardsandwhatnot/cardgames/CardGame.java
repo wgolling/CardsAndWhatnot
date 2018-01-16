@@ -25,6 +25,7 @@ package cardsandwhatnot.cardgames;
 
 import java.util.*;
 import cardsandwhatnot.lib.*;
+import cardsandwhatnot.io.CardGameUI;
 
 /**
  *
@@ -33,61 +34,80 @@ import cardsandwhatnot.lib.*;
 public class CardGame {
   String name;
   String cardType;
+  String UIType;
   List<Player> players;
   int currentPlayer;
   Deck gameDeck;
+  List<Card> tableCards;
   boolean roundOver;
   boolean gameOver;
+  
+  CardGameUI UI;
   DisplayData data; // A data package to send to the UI.
   
   public CardGame(List<Player> players) {
     name = "BLANK";
     cardType = "BLANK";
+    UIType = "BLANK";
     this.players = players;
     currentPlayer = 0;
     gameDeck = null; // Should be set by game; e.g. Hearts and Uno use different decks.
+    tableCards = new ArrayList<>();
     roundOver = (gameOver = false); 
     data = new DisplayData();
   }
   @Override
   public String toString() {return name;}
+  public String getCardType() {return cardType;}
   List<Player> getPlayers() {return players;}
   int getCurrentPlayer() {return currentPlayer;}
+  
+  // move these two to GameEngine?
+  // returns a valid card, according to the game's validatePlay method
   Card requestCard(Player player) {
-    // if human:
-    //   Card card = UI.promptCard(cardType);
-    //   while !validatePlay(card) {
-    //     card = UI.promptCard(cardType, "Invalidplay");
-    //   }
-    // if AI:
-    //   player.runScript(name);
-    return null;
+    Card card = null;
+    if (player.isHuman()) {
+      card = UI.promptCard();
+      while (!validatePlay(card)) {
+        card = UI.promptCard();
+      }
+    } else {
+      defaultCard();
+    }
+    return card;
   }
-  /* 
-  * To write new CardGame, just have to override the methods below as needed.
-  * If your game has no rounds then set roundOver = true in your initializer,
-  *   and leave setup/resolveRound() blank.
-  */  
-  private void setupGame(){}
-  private void resolveGame(){}
-  private void setupRound(){}
-  private void resolveRound(){}
-  private void setupPlay(){}
-  private void executePlay(){}
-  private void resolvePlay(){}
-  // The CardGame is then played by calling its run() method. 
+  // The CardGame is played by calling its run() method. 
   public void run() {
     setupGame();
     while (!gameOver) {
       setupRound();
       do {
         setupPlay();
-        executePlay();
-        resolvePlay();
+        Card play = requestCard(players.get(currentPlayer));
+        resolvePlay(play);
       } while(!roundOver); // If roundOver always true, each "Round" only has one Play.
       resolveRound();
     }
     resolveGame(); 
   }
+  /* 
+  * To write new CardGame, just have to override the methods below.
+  * If your game has no rounds then set roundOver = true in your initializer,
+  *   and leave setup/resolveRound() blank.
+  */  
+  boolean validatePlay(Card card) {
+    // test if a card is valid in the current game state
+    return false;
+  }
+  Card defaultCard() {
+    // implement AI for chosing a card
+    return null;
+  }
+  private void setupGame(){}
+  private void resolveGame(){}
+  private void setupRound(){}
+  private void resolveRound(){}
+  private void setupPlay(){}
+  private void resolvePlay(Card card){}
   
 }

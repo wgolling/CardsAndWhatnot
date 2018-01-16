@@ -27,6 +27,34 @@ package cardsandwhatnot.io.console;
  *
  * @author William Gollinger
  */
-public class ConsoleCardGameUI {
+public class CharBox {
+  int height;
+  int width;
+  char[][] content;
+  
+  public CharBox(int height, int width, char[][] content) {
+    this.height = height;
+    this.width = width;
+    this.content = content;
+  }
+  
+  public void setHeight(int height) {
+    this.height = height;
+  }
+  public int getHeight() {
+    return height;
+  }
+  public void setWidth(int width) {
+    this.width = width;
+  }
+  public int getWidth() {
+    return width;
+  }
+  public void setContent(char[][] content) {
+    this.content = content;
+  }
+  public char[][] getContent() {
+    return content;
+  }
   
 }
