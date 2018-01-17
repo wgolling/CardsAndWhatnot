@@ -27,6 +27,13 @@ package cardsandwhatnot.io;
  *
  * @author William Gollinger
  */
+/**
+ * The role of the InputProcessor is to properly format raw user input.
+ * Inputs and Outputs are Strings for generality.  The processor should either
+ *    return a valid id for an appropriate object, or null if none exist.
+*/
 public interface InputProcessor {
-  Object parseInput(Object input);
+  String[] parseCard(String rank, String suit);
+  String   parseGame(String gameName);
+  String   parsePlayer(String playerName);
 }

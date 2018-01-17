@@ -80,6 +80,20 @@ public class StandardCard implements Card {
     }
   }
   
+  public static Card makeCard(String rank, String suit){
+    for (Suit s : Suit.values()) {
+      if (suit.equals(s.text())) {
+        for (Rank r : Rank.values()) {
+          if (rank.equals(r.text())) {
+            return new StandardCard(r,s);
+          }
+        }
+        break;
+      }
+    }
+    return null;
+  }
+  
   private Rank rank;
   private Suit suit;
   public StandardCard(Rank rank, Suit suit) {

@@ -34,8 +34,7 @@ package cardsandwhatnot.lib;
 * - make as many default methods as possible
 */
 public interface Card extends Comparable<Card> {
-  
-  
+   
   public ValueTextEnum getRank();
   public ValueTextEnum getSuit();
   @Override

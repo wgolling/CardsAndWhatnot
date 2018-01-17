@@ -23,21 +23,25 @@
  */
 package cardsandwhatnot;
 
+import java.util.*;
 import cardsandwhatnot.cardgames.*;
-import cardsandwhatnot.io.*;
 
 /**
  *
  * @author William Gollinger
  */
 public class GameEngine {
+  // window size
   static final int MIN_HEIGHT = 50;
   static final int MIN_WIDTH = 50;
-  static final String DEFAULT_UI = "CONSOLE";
   public int height;
   public int width;
+  // UI variables
+  static final String DEFAULT_UI = "CONSOLE";
   String uiType;
-  
+  // lists
+  List<String> games;
+  List<String> players;
   
   public GameEngine(int height, int width, String uiType) {
     setWindowSize(height, width);
