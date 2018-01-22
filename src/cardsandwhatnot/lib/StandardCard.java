@@ -29,16 +29,18 @@ package cardsandwhatnot.lib;
  */
 public class StandardCard implements Card {
   public enum Suit implements ValueTextEnum {
-    CLUBS    (1, "Clubs"),
-    DIAMONDS (2, "Diamonds"),
-    SPADES   (3, "Spades"),
-    HEARTS   (4, "Hearts");
-    
+    CLUBS    (1, "Clubs",    "\u2663"),
+    DIAMONDS (2, "Diamonds", "\u2666"),
+    SPADES   (3, "Spades",   "\u2660"),
+    HEARTS   (4, "Hearts",   "\u2665");
+    			
     private final int value;
     private final String text;
-    Suit(int value, String text) {
+    private final String symbol;
+    Suit(int value, String text, String symbol) {
       this.value = value;
       this.text = text;
+      this.symbol = symbol;
     }
     @Override
     public int value() {
@@ -47,28 +49,34 @@ public class StandardCard implements Card {
     @Override
     public String text() {
       return text;
+    }
+    @Override
+    public String symbol() {
+      return symbol;
     }
   }
   public enum Rank implements ValueTextEnum {
-    TWO (2, "Two"),  
-    THREE (3, "Three"),
-    FOUR (4, "Four"),
-    FIVE (5, "Five"),
-    SIX (6, "Six"),
-    SEVEN (7, "Seven"),
-    EIGHT (8, "Eight"),
-    NINE (9, "Nine"),
-    TEN (10, "Ten"),
-    JACK (11, "Jack"),
-    QUEEN (12, "Queen"),
-    KING (13, "King"),
-    ACE (14, "Ace");
+    TWO   (2,  "Two",   "2"),  
+    THREE (3,  "Three", "3"),
+    FOUR  (4,  "Four",  "4"),
+    FIVE  (5,  "Five",  "5"),
+    SIX   (6,  "Six",   "6"),
+    SEVEN (7,  "Seven", "7"),
+    EIGHT (8,  "Eight", "8"),
+    NINE  (9,  "Nine",  "9"),
+    TEN   (10, "Ten",   "10"),
+    JACK  (11, "Jack",  "J"),
+    QUEEN (12, "Queen", "Q"),
+    KING  (13, "King",  "K"),
+    ACE   (14, "Ace",   "A");
     
     private final int value;
     private final String text;
-    Rank(int value, String text) {
+    private final String symbol;
+    Rank(int value, String text, String symbol) {
       this.value = value;
       this.text = text;
+      this.symbol = symbol;
     }
     @Override
     public int value() {
@@ -77,6 +85,10 @@ public class StandardCard implements Card {
     @Override
     public String text() {
       return text;
+    }
+    @Override
+    public String symbol() {
+      return symbol;
     }
   }
   

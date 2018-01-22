@@ -28,13 +28,48 @@ package cardsandwhatnot.lib;
  * @author William Gollinger
  */
 public class DisplayData {
-  String[] players; // Indexes players in turn order; String[0]
-  String[][] hands; // Indexes hands, first variable indexes players, second cards in hand
-  String[][] tableCards; // Indexes cards on table, first variable indexes piles
+  // Indexes players in turn order;
+  String[] players; 
+  int[] scores;
+  // Indexes hands, first variable indexes players, second cards in hand
+  // Each card must is represented as "Rank.symbol()Suit.symbol()"
+  String[][] hands; 
+  // Indexes cards on table, first variable indexes piles
+  String[][] tableCards; 
   
-  public DisplayData( ) {
-    //..
+  public DisplayData(String[] players, int[] scores, 
+                     String[][] hands, String[][] tableCards ) {
+    this.players = players;
+    this.scores = scores;
+    this.hands = hands;
+    this.tableCards = tableCards;
   }
-  
-  //..
+  public DisplayData() {
+    this(new String[0], new int[0], new String[0][0], new String[0][0]);
+  }
+
+  public String[] getPlayers() {
+    return players;
+  }
+  public void setPlayers(String[] players) {
+    this.players = players;
+  }
+  public int[] getScores() {
+    return scores;
+  }
+  public void setScores(int[] scores) {
+    this.scores = scores;
+  }
+  public String[][] getHands() {
+    return hands;
+  }
+  public void setHands(String[][] hands) {
+    this.hands = hands;
+  }
+  public String[][] getTableCards() {
+    return tableCards;
+  }
+  public void setTableCards(String[][] tableCards) {
+    this.tableCards = tableCards;
+  }
 }

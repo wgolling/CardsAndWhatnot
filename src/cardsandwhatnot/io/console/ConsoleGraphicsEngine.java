@@ -23,13 +23,281 @@
  */
 package cardsandwhatnot.io.console;
 
+import java.util.*;
+import java.lang.Math;
+import cardsandwhatnot.lib.DisplayData;
+import cardsandwhatnot.lib.Card;
+
 /**
  *
  * @author William Gollinger
  */
 public class ConsoleGraphicsEngine {
+  // CharBox is a wrapper around char[][]
+  private class CharBox {
+    static final char DEFAULT_CHAR = '\u0000'; // treated as transparent
+                                               // NOTE: \u0000 is java's default char value, so this is currently redundant
+    int x;
+    int y;
+    int height;
+    int width;
+    char[][] content;
+    
+    public CharBox(char[][] content) {
+      x=y=0;
+      this.height = content.length;
+      this.width = content[0].length;
+      this.content = content;
+    }
+    public CharBox(char[][] content, int x, int y) {
+      this.x=x;
+      this.y=y;
+      this.content = content;
+    }
+    public void setX(int x) {
+      this.x = x;
+    }
+    public void setY(int y) {
+      this.y = y;
+    }
+    public void setXY(int x, int y) {
+      setX(x);
+      setY(y);
+    }
+    public int getX() {
+      return x;
+    }
+    public int getY() {
+      return y;
+    }
+    public int getHeight() {
+      return height;
+    }
+    public int getWidth() {
+      return width;
+    }
+    public void setContent(char[][] content) {
+      this.content = content;
+      this.width = content[0].length;
+      this.height = content.length;
+    }
+    public char[][] getContent() {
+      return content;
+    }
+  }
+  private class Layer {
+    List<CharBox> boxes;
+    public Layer() {
+      boxes = new ArrayList<>();
+    }
+    void addBox(CharBox box) {
+      boxes.add(box);
+    }
+    void pinBox(CharBox box, int x, int y) {
+      box.setXY(x,y);
+      addBox(box);
+    }
+    boolean removeBox(CharBox box) {
+      return boxes.remove(box);
+    }
+    List<CharBox> getBoxes() {
+      return boxes;
+    }
+  }
+
+  int windowHeight;
+  int windowWidth;
+  char[][] display;
+  DisplayData data;
+  Map<String, Layer> layers;
+  
+  private final String CARD_SEPARATOR = ",";                                 // Input strings should take the form "Rank.getSymbol(),Suit.getSymbol()"
+  // card dimensions
+  private final int CARD_HEIGHT = 6;
+  private final int CARD_WIDTH = 5;
+  // card graphics
+  private final char TOP_BORDER = '-';
+  private final char SIDE_BORDER = '|';
+  private final char UL_CORNER = '/';
+  private final char UR_CORNER = '\\';
+  private final char BL_CORNER = '\\';
+  private final char BR_CORNER = '/';
+  private final char WHITE_SPACE = ' ';
+  // blank card canvases
+  private char[][] CARD_SPACE = new char[CARD_HEIGHT][CARD_WIDTH];           // A transparent card-sized box, representing the empty-hand.
+  private char[][] CARD;
+  private char[][] PARTIAL_CARD;                                             // Partial cards are for fanned hands.
+  private char[][] PARTIAL_CARD_WIDE;                                        // Unfortunately, some ranks have 2 characters.
   
   public ConsoleGraphicsEngine(int windowHeight, int windowWidth) {
-    
+    // Initialize variables.
+    this.windowHeight = windowHeight;
+    this.windowWidth = windowWidth;
+    display = new char[windowHeight][windowWidth];
+    data = new DisplayData();
+    layers = new HashMap<>(); 
+    layers.put("BASE", new Layer());
+    layers.put("Players", new Layer());
+    layers.put("SCORES", new Layer());
+    layers.put("TABLE", new Layer());
+    layers.put("HANDS", new Layer());
+    // Initialize blank card canvases.
+    CARD = new char[CARD_HEIGHT][CARD_WIDTH];
+    CARD[0][0] = UL_CORNER;
+    CARD[0][CARD_WIDTH-1] = UR_CORNER;
+    CARD[CARD_HEIGHT-1][0] = BL_CORNER;
+    CARD[CARD_HEIGHT-1][CARD_WIDTH-1] = BR_CORNER;
+    for (int j=1; j < CARD_HEIGHT-1; j++) {
+      CARD[j][0] = CARD[j][CARD_WIDTH-1] = SIDE_BORDER;
+    }
+    for (int i=1; i < CARD_WIDTH-1; i++) {
+      CARD[0][i] = CARD[CARD_HEIGHT-1][i] = TOP_BORDER;
+      for (int j=1; j < CARD_HEIGHT-1; j++) {
+        CARD[j][i] = WHITE_SPACE;
+      }
+    }
+    PARTIAL_CARD = new char[CARD_HEIGHT][2];                                  // Partial cards are just sub-regions; assignment automatically truncates sizes.
+    PARTIAL_CARD = CARD;
+    PARTIAL_CARD_WIDE = new char[CARD_HEIGHT][3];
+    PARTIAL_CARD_WIDE = CARD;
+  }
+  void updateData(DisplayData newData) {
+    data = newData;
+  }
+  // Updating display involves drawing each layer in sequence.
+  void updateDisplay() {
+    for (Layer layer : layers.values()) {
+      drawLayer(layer);
+    }
+  }
+  // Drawing a layer invoves drawing its boxes.
+  private void drawLayer(Layer layer) {
+    for (CharBox box : layer.getBoxes()) {
+      drawBox(box);
+    }
+  }
+  private void drawBox(CharBox box) {
+    int iStart = (box.x < 0) ? -box.x : 0;                                   // Determine end points of for loops
+    int iEnd = (box.x + box.width > windowWidth) ? windowWidth - box.x 
+                                                 : box.width;
+    int jStart = (box.y < 0) ? -box.y : 0;
+    int jEnd = (box.y + box.height > windowHeight) ? windowHeight - box.y 
+                                                   : box.height;
+    for (int j = jStart; j < jEnd; j++) {
+      for (int i = iStart; i < iEnd; i++) {
+        if (box.content[j][i] != CharBox.DEFAULT_CHAR) {                     // Check for transparency.
+          display[j+box.y][i+box.x] = box.content[j][i];
+        }
+      }
+    }
+  }
+  // Attaching Box to Layer at a coordinate, with an optional alignment parameter.
+  // Alignment specifies wether the coordinates denote upper-left corner (default), center, etc.
+  private void pinBoxToLayer(CharBox box, int x, int y, Layer layer) {
+    layer.pinBox(box, x, y);
+  }
+  private void pinBoxToLayer(CharBox box, int x, int y, Layer layer, String alignment) {
+    int xOffset;
+    switch (alignment.charAt(1)) {
+      case 'l': xOffset = 0;
+      case 'c': xOffset = -(int)Math.floor(box.width/2);
+      case 'r': xOffset = -box.width;
+      default: xOffset = 0;
+    }
+    int yOffset;
+    switch (alignment.charAt(0)) {
+      case 'u': yOffset = 0;
+      case 'c': yOffset = -(int)Math.floor(box.height/2);
+      case 'd': yOffset = -box.height;
+      default: yOffset = 0;
+    }
+    layer.pinBox(box, x+xOffset, y+yOffset);
+  }
+  /**
+  * Helpful drawing functions.
+  */
+  private boolean copyCanvas(char[][] source, char[][] target, int x, int y) {
+    int sourceHeight = source.length;                                        // readability variables
+    int sourceWidth = source[0].length;
+    if (y + sourceHeight > target.length || x + sourceWidth > target[0].length) {
+      return false;
+    }
+    for (int j=0; j < sourceHeight; j++) {
+      for (int i=0; x < sourceWidth; x++) {
+        target[j+y][i+x] = source[j][i];
+      }
+    }
+    return true;
+  }
+  private boolean drawPartialCardOnCanvas(char[][] canvas, int x, int y, String rank, String suit) {
+    if (x + CARD_WIDTH > canvas[0].length || y + CARD_HEIGHT > canvas.length) {
+      return false;
+    }
+    // Draw a wide partial card if the rank is two chars, and place the extra char.
+    if (rank.length() == 2) {
+      copyCanvas(PARTIAL_CARD_WIDE, canvas, x, y);
+      canvas[y+1][x+2] = rank.charAt(1);
+    } else {
+      copyCanvas(PARTIAL_CARD, canvas, x, y);
+    }
+    canvas[y+1][x+1] = rank.charAt(0);
+    canvas[y+2][x+1] = suit.charAt(0);
+    return true;
+  }
+  private boolean drawCardOnCanvas(char[][] canvas, int x, int y, String rank, String suit) {
+    if (x + CARD_WIDTH > canvas[0].length || y + CARD_HEIGHT > canvas.length) {
+      return false;
+    }
+    // Draw blank card.
+    copyCanvas(CARD, canvas, x, y);
+    // Place symbols.
+    if (rank.length() == 2) {
+      canvas[y+CARD_HEIGHT-1][x+CARD_WIDTH-2] = rank.charAt(0);
+      canvas[y+CARD_HEIGHT-1][x+CARD_WIDTH-1] = rank.charAt(1);
+    } else {
+      canvas[y+CARD_HEIGHT-1][x+CARD_WIDTH-1] = rank.charAt(0);
+    }
+    canvas[y+CARD_HEIGHT-2][x+CARD_WIDTH-1] = suit.charAt(0);
+    return true;
+  }
+  /**
+  * Making special boxes.
+  */
+  private CharBox makeHandBox(String[] cards) {
+    if (cards.length == 0) { 
+      return new CharBox(CARD_SPACE);
+    }
+    // First process the input array and compute dimensions for box.
+    int length = cards.length;
+    int fanWidth = 0;
+    String[][] splitCards = new String[length][2];                           // Convert String->String[] by "Rank,Suit"->{"Rank", "Suit")
+    for (int i=0; i < length - 1; i++) { // TODO: functional operation/stream
+      splitCards[i] = cards[i].split(CARD_SEPARATOR); // TODO? pass Cards to GraphicsEngine instead of strings?
+      fanWidth += 1 + splitCards[i][0].length();                             // Widen depending on the length of Rank.
+    }
+    splitCards[length] = cards[length].split(CARD_SEPARATOR);
+    char[][] box = new char[CARD_HEIGHT][CARD_WIDTH + fanWidth];
+    // Draw cards in box: first the partial cards, then the top card.
+    int offset=0;
+    for (int i=0; i < length - 1; i++) {
+      drawPartialCardOnCanvas(box, offset, 0, splitCards[i][0], splitCards[i][1]);
+      offset += 1 + splitCards[i][0].length();
+    }
+    drawCardOnCanvas(box, offset, 0, splitCards[length-1][0], splitCards[length-1][1]);
+    return new CharBox(box);
+  }
+  private CharBox makeCardBox(String card) {
+    return makeHandBox(new String[]{card});
+  }
+  private CharBox makePlayerBox(String player, String score) { 
+    int boxWidth = Math.min(player.length(), 3);
+    String[] rows = new String[]{ player, score }; // TODO? might want to display more info
+    char[][] canvas = new char[rows.length][boxWidth];
+    for (int row=0; row < rows.length; row++) {                              // Print strings to char[].
+      for (int i=0; i < rows[row].length(); i++) {
+        canvas[row][i] = rows[row].charAt(i);
+      }
+    }
+    return new CharBox(canvas);
   }
 }

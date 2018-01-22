@@ -30,4 +30,5 @@ package cardsandwhatnot.lib;
 public interface ValueTextEnum {
   int value();
   String text();
+  String symbol();
 }
