@@ -32,8 +32,8 @@ import cardsandwhatnot.cardgames.*;
  */
 public class GameEngine {
   // window size
-  static final int MIN_HEIGHT = 50;
-  static final int MIN_WIDTH = 50;
+  public static final int MIN_HEIGHT = 50;
+  public static final int MIN_WIDTH = 50;
   public int height;
   public int width;
   // UI variables
