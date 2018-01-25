@@ -30,7 +30,7 @@ import java.util.*;
  * @author William Gollinger
  */
 public class Hand {
-  List<Card> cards; 
+  List<Card> cards;  // Maintains a sorted list of cards.
 
   public Hand() {
     cards = new ArrayList<>();
@@ -47,6 +47,7 @@ public class Hand {
   }
   void addCard(Card card) {
     cards.add(card);
+    sort();
   }
   void addCards(List<Card> otherCards) {
     for (Card card : otherCards) {

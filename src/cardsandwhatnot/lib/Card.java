@@ -36,6 +36,9 @@ package cardsandwhatnot.lib;
 public interface Card extends Comparable<Card> {
    
   public ValueTextEnum getRank();
+  public default int rankWidth() {                                           // Some ranks, e.g. 10 or +2, are wider than others.
+    return getRank().symbol().length();
+  } 
   public ValueTextEnum getSuit();
   @Override
   public boolean equals(Object other);
