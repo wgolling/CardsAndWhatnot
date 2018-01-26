@@ -32,30 +32,23 @@ import java.util.*;
 public class LayeredCharCanvas { 
   // TODO: remove dependency on char.  Maybe if I use Character instead I can use a generic type.
   
-  public static final char TRANSPARENT = '\u0000';  // Treated as transparent.  Note this is java's default char value, so this variable is currently redundant.
+  public static final char TRANSPARENT = '\u0000';  // The default char is treated as transparent.  Note this is java's default char value, so this variable is currently redundant.
 
   /*
    * The Box class is the elementary graphical object for the LayeredCharCanvas.
-   * It is essentially a wrapper around char[][].
+   * It is essentially a wrapper around char[][], with drawing functions.
    */
   class Box {
     String name;
     int y;            // The virtual coordinates of the Box.
-    int x;            // y comes before x because I want the first index of content to be the row
-    int[] alignment = new int[2];  // two ints from {0,1,2} which determine wether coordinates are upper-left, centre-right, etc.
-    int height;       // height and width are redundant but convenient, as they are derived from content,  
+    int x;            // y comes before x so that the first coordinate represents the row.
+    int[] alignment = new int[2];  // Two ints from {0,1,2} which determine wether coordinates are upper-left, centre-right, etc.
+    int height;       // height and width are redundant but convenient, as they are derived from content.  
     int width;
-    char[][] content; // content contains the "graphics".  The default char \u0000 will be treated as transparent. 
+    char[][] content; // content contains the "graphics".  The default char \u0000 is treated as transparent. 
     
-    public Box(char[][] content) {
-      this(content, "", 0, 0);
-    }
-    public Box(char[][] content, int y, int x) {
-      this(content, "", y, x);
-    }
-    public Box(char[][] content, String name) {
-      this(content, name, 0,0);
-    }
+    // Constructors always take a char[][], but other parameters are optional.
+    // Alignment is not currently a possible parameter.
     public Box(char[][] content, String name, int y, int x) {
       this.name = name;
       this.y=y;
@@ -64,6 +57,17 @@ public class LayeredCharCanvas {
       this.width = ( (this.height == 0) ? 0 : content[0].length );
       this.content = content;
     }
+    public Box(char[][] content, String name) {
+      this(content, name, 0,0);
+    }
+    public Box(char[][] content, int y, int x) {
+      this(content, "", y, x);
+    }
+    public Box(char[][] content) {
+      this(content, "", 0, 0);
+    }
+    // getting and setting
+    // most of these are probably optional, could just use instance.param
     void setName(String name) {
       this.name = name;
     }
@@ -96,12 +100,6 @@ public class LayeredCharCanvas {
     int getWidth() {
       return width;
     }
-    int yOffset() {
-      return (alignment[0] == 2) ? -height+1 : -(alignment[0]* height)/2;
-    }
-    int xOffset() {
-      return (alignment[1] == 2) ? -width+1 : -(alignment[1]* width)/2;
-    }
     void setContent(char[][] content) {
       this.height = content.length;
       this.width = ( (this.height == 0) ? 0 : content[0].length );
@@ -110,6 +108,15 @@ public class LayeredCharCanvas {
     }
     char[][] getContent() {
       return content;
+    }
+    // Computing offsets from alignment.
+    // 0 -> no shift;  1 -> shift half the range;  2 -> shift the whole range -1
+    // the -1 is so that alignment of {2,2} has x,y at bottom right entry.
+    int yOffset() {
+      return (alignment[0] < 2) ? -(alignment[0]* height)/2 : -height+1 ;
+    }
+    int xOffset() {
+      return (alignment[1] < 2) ? -(alignment[1]* width)/2 : -width+1;
     }
     // the copyContent function takes alignment of the box into account, even if you specify new coordinates.
     void copyContent(char[][] target) {
@@ -127,13 +134,14 @@ public class LayeredCharCanvas {
     String name;                                                             // Helps the user keep track of their layers, it is not strictly necessary.
     List<Box> boxes;
     
-    public Layer() {
-      this("");
-    }
     public Layer(String name) {
       this.name = name;
       boxes = new ArrayList<>();
     }
+    public Layer() {
+      this("");
+    }
+    
     void addBox(Box box) {
       boxes.add(box);
     }
@@ -142,7 +150,7 @@ public class LayeredCharCanvas {
       box.setYX(y, x);
       boxes.add(box);
     }
-    void clear() {
+    void clearBoxes() {
       boxes = new ArrayList<>();
     }
     void drawOn(char[][] target) {

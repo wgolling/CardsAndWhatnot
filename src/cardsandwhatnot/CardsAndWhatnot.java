@@ -23,6 +23,9 @@
  */
 package cardsandwhatnot;
 
+import cardsandwhatnot.io.console.ConsoleCardGraphics;
+import cardsandwhatnot.lib.StandardDeck;
+
 /**
  *
  * @author William Gollinger
@@ -33,7 +36,21 @@ public class CardsAndWhatnot {
    * @param args the command line arguments
    */
   public static void main(String[] args) {
-    // TODO code application logic here
+    trySomeGraphics();
+  }
+  
+  static void trySomeGraphics() {
+    ConsoleCardGraphics graphics = new ConsoleCardGraphics(100,200);
+    StandardDeck deck = new StandardDeck();
+    char[][] result = graphics.makeHand(deck.deal(1, 52).get(1).getCards());
+    String output = "";
+    for (char[] row : result) {
+      for (int i=0; i<row.length; i++) {
+        output+= String.valueOf(row[i]);
+      }
+      output += "\n";
+    }
+    System.out.println(output);
   }
   
 }

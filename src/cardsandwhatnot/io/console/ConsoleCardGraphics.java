@@ -27,47 +27,45 @@ import cardsandwhatnot.lib.Card;
 import java.util.*;
 
 /**
- *
+ * ConsoleCardGraphics has special functions for drawing card boxes, and
+ * uses a LayeredCanvas to arrange and display them.
  * @author William Gollinger
  */
 public class ConsoleCardGraphics {
+  // TODO: use DisplayData to produce table view, score view etc.
+  
   LayeredCharCanvas canvas;
   Map<String, LayeredCharCanvas.Box> hands;
+  String[] players;
+  int currentPlayer;
   
   // card dimensions
-  private final int CARD_HEIGHT = 6;
-  private final int CARD_WIDTH = 5;
+  final int CARD_HEIGHT = 6;
+  final int CARD_WIDTH = 5;
   // basic card graphics
-  private final char TOP_BORDER = '-';
-  private final char SIDE_BORDER = '|';
-  private final char UL_CORNER = '/';
-  private final char UR_CORNER = '\\';
-  private final char BL_CORNER = '\\';
-  private final char BR_CORNER = '/';
-  private final char WHITE_SPACE = ' ';
+  final char TOP_BORDER = '-';
+  final char SIDE_BORDER = '|';
+  final char UL_CORNER = ' ';
+  final char UR_CORNER = ' ';
+  final char BL_CORNER = ' ';
+  final char BR_CORNER = ' ';
+  final char WHITE_SPACE = ' ';
   // card templates
-  private final char[][] CARD_SPACE = new char[CARD_HEIGHT][CARD_WIDTH];           // A transparent card-sized box, representing the empty-hand.
-  private final char[][] CARD;
-  private char[][] PARTIAL_CARD;                                             // Partial cards are for fanned hands.
-  private char[][] PARTIAL_CARD_WIDE;                                        // Unfortunately, some ranks have 2 characters.
-    
-//  class HandCards {
-//    int y; // coordinates representing the center of the hand
-//    int x;
-//    List<Card> cards; 
-//    
-//    public CardGroup(List<Card> cards) {
-//      this.cards = cards;
-//    }
-//    public CardGroup() {
-//      this(new ArrayList<>());
-//    }
-//    
-//    List<LayeredCharCanvas.Box> makeBoxes() {
-//      
-//    } 
-//  }
+  final char[][] CARD_SPACE = new char[CARD_HEIGHT][CARD_WIDTH];           // A transparent card-sized box, representing the empty-hand.
+  final char[][] CARD;
+  char[][] PARTIAL_CARD;                                             // Partial cards are for fanned hands.
+  char[][] PARTIAL_CARD_WIDE;                                        // Unfortunately, some ranks have 2 characters.
+  // special coordinates
+  //   north, east, south, west, centre, etc.
+  // 
   
+  /**
+   * Constructor takes a window size, which is unchangeable.
+   * It adds the layers the class will use to the LayeredCanvas, and 
+   * constructs the card templates.
+   * @param windowHeight
+   * @param windowWidth 
+   */    
   public ConsoleCardGraphics(int windowHeight, int windowWidth) {
     // Construct canvas with specified layers.
     canvas = new LayeredCharCanvas(windowHeight, windowWidth);
@@ -97,7 +95,7 @@ public class ConsoleCardGraphics {
     PARTIAL_CARD_WIDE = CARD;
   }
   /**
-   * Draws a partial card template to a target canvas at given coordinates.
+   * Draws a partial card template to a target char[][] at given coordinates.
    * @param card
    * @param target
    * @param y
@@ -113,10 +111,10 @@ public class ConsoleCardGraphics {
       LayeredCharCanvas.copyCanvas(PARTIAL_CARD, target, y, x);
     }
     target[y+1][x+1] = rank.charAt(0);
-    target[y+2][x+1] = suit.charAt(1);
+    target[y+2][x+1] = suit.charAt(0);
   }
   /**
-   * Draws a full card template to a target canvas at given coordinates.
+   * Draws a full card template to a target char[][] at given coordinates.
    * @param card
    * @param target
    * @param y
@@ -127,36 +125,32 @@ public class ConsoleCardGraphics {
     String rank = card.getRank().symbol();
     String suit = card.getSuit().symbol();
     if (rank.length() == 2) {
-      target[y+1][x+2] = target[CARD_HEIGHT-2][CARD_WIDTH-2] = rank.charAt(1);
-      target[CARD_HEIGHT-2][CARD_WIDTH-3] = rank.charAt(0);
-    } else {
-      target[CARD_HEIGHT-2][CARD_WIDTH-2] = rank.charAt(0);
+      target[y+1][x+2] = target[y+CARD_HEIGHT-2][x+CARD_WIDTH-3] = rank.charAt(1);
     }
-    target[y+1][x+1] = rank.charAt(0);
-    target[y+2][x+1] = target[CARD_HEIGHT-3][CARD_WIDTH-2] = suit.charAt(0);
+    target[y+1][x+1] = target[y+CARD_HEIGHT-2][x+CARD_WIDTH-2] = rank.charAt(0);
+    target[y+2][x+1] = target[y+CARD_HEIGHT-3][x+CARD_WIDTH-2] = suit.charAt(0);
   }
   /**
    * Given a list of cards, returns a char[][] depicting them as a fan.
    * @param cards
    * @return 
    */
-  char[][] makeHand(Card[] cards) {
-    if (cards.length == 1) {
-      return makeCard(cards[0]);
+  public char[][] makeHand(List<Card> cards) {
+    if (cards.size() == 1) {
+      return makeCard(cards.get(0));
     }
-    Card[] fanCards = new Card[cards.length-1];
-    fanCards = cards;
+    Card lastCard = cards.remove(cards.size()-1);
     int fanWidth = 0;
-    for (Card card : fanCards) {
+    for (Card card : cards) {
       fanWidth += 1 + card.rankWidth();
     }
     char[][] hand = new char[CARD_HEIGHT][fanWidth+CARD_WIDTH];
     int offset = 0;
-    for (Card card : fanCards) {
+    for (Card card : cards) {
       drawPartialCard(card, hand, 0, offset);
       offset += 1 + card.rankWidth();
     }
-    drawCard(cards[cards.length-1], hand, 0, offset);
+    drawCard(lastCard, hand, 0, offset);
     return hand;
   }
   /**
@@ -175,8 +169,7 @@ public class ConsoleCardGraphics {
    * @param hand
    * @param cards 
    */
-  void updateHand(LayeredCharCanvas.Box hand, Card[] cards) {
+  void updateHand(LayeredCharCanvas.Box hand, List<Card> cards) {
     hand.setContent(makeHand(cards));
   }
-  
 }
