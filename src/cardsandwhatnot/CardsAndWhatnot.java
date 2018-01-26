@@ -40,17 +40,16 @@ public class CardsAndWhatnot {
   }
   
   static void trySomeGraphics() {
-    ConsoleCardGraphics graphics = new ConsoleCardGraphics(100,200);
-    StandardDeck deck = new StandardDeck();
-    char[][] result = graphics.makeHand(deck.deal(1, 52).get(1).getCards());
+    ConsoleCardGraphics graphics = new ConsoleCardGraphics(40,125);
+    graphics.pinHand( (new StandardDeck()).getCards(), 5, 5);
     String output = "";
-    for (char[] row : result) {
+    for (char[] row : graphics.makeOutput()) {
       for (int i=0; i<row.length; i++) {
         output+= String.valueOf(row[i]);
       }
       output += "\n";
     }
-    System.out.println(output);
+    System.console().format("%s", output);
   }
   
 }

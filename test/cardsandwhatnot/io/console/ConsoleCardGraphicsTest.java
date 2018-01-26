@@ -57,7 +57,11 @@ public class ConsoleCardGraphicsTest {
     TEN_OF_DIAMONDS = new StandardCard(StandardCard.Rank.TEN, StandardCard.Suit.DIAMONDS);
     TWO_OF_CLUBS = new StandardCard(StandardCard.Rank.TWO, StandardCard.Suit.CLUBS);
     QUEEN_OF_HEARTS = new StandardCard(StandardCard.Rank.QUEEN, StandardCard.Suit.HEARTS);
-    hand = Arrays.asList(ACE_OF_SPADES, TEN_OF_DIAMONDS, TWO_OF_CLUBS, QUEEN_OF_HEARTS);
+    hand = new ArrayList<>();
+    hand.add(ACE_OF_SPADES);
+    hand.add(TEN_OF_DIAMONDS);
+    hand.add(TWO_OF_CLUBS);
+    hand.add(QUEEN_OF_HEARTS);
   }
     
   @Before
@@ -101,11 +105,10 @@ public class ConsoleCardGraphicsTest {
   @Test
   public void testMakeHand() {
     System.out.println("makeHand");
-    hand = Arrays.asList(ACE_OF_SPADES, TEN_OF_DIAMONDS, TWO_OF_CLUBS, QUEEN_OF_HEARTS);
     testCanvas = graphics.makeHand(hand);
     assertEquals('A', testCanvas[1][1]);
     assertEquals(graphics.SIDE_BORDER,testCanvas[1][5]);
-    assertEquals(graphics.BR_CORNER, testCanvas[CARD_HEIGHT-1][CARD_WIDTH-1 + 9]);
+    assertEquals(graphics.BR_CORNER, testCanvas[CARD_HEIGHT-1][CARD_WIDTH-1 + 7]);
   }
 
   /**

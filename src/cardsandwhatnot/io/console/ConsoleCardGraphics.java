@@ -55,6 +55,8 @@ public class ConsoleCardGraphics {
   final char[][] CARD;
   char[][] PARTIAL_CARD;                                             // Partial cards are for fanned hands.
   char[][] PARTIAL_CARD_WIDE;                                        // Unfortunately, some ranks have 2 characters.
+  // background
+  final char[][] BACKGROUND;
   // special coordinates
   //   north, east, south, west, centre, etc.
   // 
@@ -93,6 +95,25 @@ public class ConsoleCardGraphics {
     PARTIAL_CARD = CARD;
     PARTIAL_CARD_WIDE = new char[CARD_HEIGHT][3];
     PARTIAL_CARD_WIDE = CARD;
+    // Draw default background
+    // Background "holds the window open", in the sense that it fills it with non-null characters.
+    BACKGROUND = new char[windowHeight][windowWidth];
+    for (int i=1; i< windowWidth-1; i++) {
+      BACKGROUND[0][i] = BACKGROUND[windowHeight-1][i] = TOP_BORDER;
+    }
+    for (int j=1; j< windowHeight-1; j++) {
+      BACKGROUND[j][0] = BACKGROUND[j][windowWidth-1] = SIDE_BORDER;
+      for (int i=1; i<windowWidth-1; i++) {
+        BACKGROUND[j][i] = WHITE_SPACE;
+      }
+    }
+    BACKGROUND[0][0] = BACKGROUND[windowHeight-1][0] 
+                     = BACKGROUND[0][windowWidth-1]
+                     = BACKGROUND[windowHeight-1][windowWidth-1] = WHITE_SPACE;
+    canvas.pinContentToLayer(BACKGROUND, "BACKGROUND", 0, 0);
+  }
+  public char[][] makeOutput() {
+    return canvas.draw();
   }
   /**
    * Draws a partial card template to a target char[][] at given coordinates.
@@ -152,6 +173,9 @@ public class ConsoleCardGraphics {
     }
     drawCard(lastCard, hand, 0, offset);
     return hand;
+  }
+  public LayeredCharCanvas.Box pinHand(List<Card> cards, int y, int x) {
+    return canvas.pinContentToLayer(makeHand(cards), "HANDS", y, x);
   }
   /**
    * Makes a char[][] depicting the given card.
