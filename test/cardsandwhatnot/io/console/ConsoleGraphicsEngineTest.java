@@ -23,7 +23,7 @@
  */
 package cardsandwhatnot.io.console;
 
-import cardsandwhatnot.lib.DisplayData;
+import cardsandwhatnot.io.DisplayData;
 import cardsandwhatnot.GameEngine;
 import org.junit.After;
 import org.junit.AfterClass;

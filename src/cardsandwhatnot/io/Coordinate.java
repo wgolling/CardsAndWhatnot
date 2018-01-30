@@ -21,55 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package cardsandwhatnot.lib;
-
-import java.util.*;
+package cardsandwhatnot.io;
 
 /**
  *
  * @author William Gollinger
  */
-public class Hand {
-  List<Card> cards;  // Maintains a sorted list of cards.
-
-  public Hand() {
-    cards = new ArrayList<>();
+public class Coordinate {
+  public int y;
+  public int x;
+  public int yOffset;
+  public int xOffset;
+  int[] alignment;
+  
+  public Coordinate(int y, int x, int[] alignment) {
+    this.y = y;
+    this.x = x;
+    this.alignment = alignment;
   }
-  public Hand(List<Card> cards) { // Have to be careful about Array.asList() not returning ArrayList
-    this.cards = new ArrayList<>(cards);
-    sort();
+  public Coordinate(int y, int x) {
+    this(y, x, new int[]{0,0});
   }
-
-  public List<Card> getCards() {
-    return cards;
+  public void setYX(int y, int x) {
+    this.y = y;
+    this.x = x;
   }
-  public int size() {
-    return cards.size();
+  public void align(int[] alignment) {
+    this.alignment = alignment;
   }
-  void addCard(Card card) {
-    cards.add(card);
-    sort();
-  }
-  void addCards(List<Card> otherCards) {
-    for (Card card : otherCards) {
-      cards.add(card);
-    }
-    sort();
-  }
-  // For removeCards it is important that subCards be a subset of cards.
-  // It will return null otherwise.
-  boolean removeCards(List<Card> subCards) {
-    List<Card> cardsCopy = cards;
-    for (Card card : subCards) {
-      if (!cardsCopy.remove(card)) {
-        return false;
-      }
-    }
-    cards = cardsCopy;
-    return true;
-  }
-  public void sort() {
-    Collections.sort(cards);
-  }
- 
 }

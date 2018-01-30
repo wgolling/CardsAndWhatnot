@@ -24,6 +24,7 @@
 package cardsandwhatnot.io.console;
 
 import cardsandwhatnot.lib.Card;
+import cardsandwhatnot.io.DisplayData;
 import java.util.*;
 
 /**
@@ -34,15 +35,28 @@ import java.util.*;
 public class ConsoleCardGraphics {
   // TODO: use DisplayData to produce table view, score view etc.
   
-  LayeredCharCanvas canvas;
-  Map<String, LayeredCharCanvas.Box> hands;
-  String[] players;
-  int currentPlayer;
+  public enum Direction {
+    SOUTH (1), WEST (2), NORTH (3), EAST (4);
+    
+    private final int player;
+    Direction(int player) {
+      this.player = player;
+    }
+  }
   
+  // The graphics engine utilizes a LayeredCanvas to organize its elements.
+  LayeredCharCanvas canvas;
+  // The information used to construct views comes in a DisplayData capsule.
+  DisplayData data;
+  // conveninent box collections
+  Map<Direction, LayeredCharCanvas.Box> players;
+  Map<Direction, LayeredCharCanvas.Box> scores;
+  Map<Direction, LayeredCharCanvas.Box> hands;
+  Map<Direction, LayeredCharCanvas.Box> tableCards;  
   // card dimensions
   final int CARD_HEIGHT = 6;
   final int CARD_WIDTH = 5;
-  // basic card graphics
+  // basic graphic elements
   final char TOP_BORDER = '-';
   final char SIDE_BORDER = '|';
   final char UL_CORNER = ' ';
@@ -51,16 +65,17 @@ public class ConsoleCardGraphics {
   final char BR_CORNER = ' ';
   final char WHITE_SPACE = ' ';
   // card templates
-  final char[][] CARD_SPACE = new char[CARD_HEIGHT][CARD_WIDTH];           // A transparent card-sized box, representing the empty-hand.
+  final char[][] CARD_SPACE = new char[CARD_HEIGHT][CARD_WIDTH];             // A transparent card-sized box, representing the empty-hand.
   final char[][] CARD;
-  char[][] PARTIAL_CARD;                                             // Partial cards are for fanned hands.
-  char[][] PARTIAL_CARD_WIDE;                                        // Unfortunately, some ranks have 2 characters.
+  char[][] PARTIAL_CARD;                                                     // Partial cards are for fanned hands.
+  char[][] PARTIAL_CARD_WIDE;                                                // Unfortunately, some ranks have 2 characters.
   // background
   final char[][] BACKGROUND;
   // special coordinates
-  //   north, east, south, west, centre, etc.
-  // 
-  
+  public final int[] CENTRE;
+  Map<Direction, int[]> handCoordinates;
+  Map<Direction, int[]> tableCoordinates;
+
   /**
    * Constructor takes a window size, which is unchangeable.
    * It adds the layers the class will use to the LayeredCanvas, and 
@@ -69,13 +84,16 @@ public class ConsoleCardGraphics {
    * @param windowWidth 
    */    
   public ConsoleCardGraphics(int windowHeight, int windowWidth) {
-    // Construct canvas with specified layers.
+    // Construct canvas with named layers.
     canvas = new LayeredCharCanvas(windowHeight, windowWidth);
     canvas.addLayer("BACKGROUND");
     canvas.addLayer("PLAYERS");
     canvas.addLayer("SCORES");
     canvas.addLayer("HANDS");
     canvas.addLayer("TABLE");
+    // Initialize DisplayData object. 
+    // TODO: take as param in the constructor, so we can have same reference as CardGameEngine?
+    data = new DisplayData();
     // Construct card templates.
     CARD = new char[CARD_HEIGHT][CARD_WIDTH];
     CARD[0][0] = UL_CORNER;
@@ -111,10 +129,26 @@ public class ConsoleCardGraphics {
                      = BACKGROUND[0][windowWidth-1]
                      = BACKGROUND[windowHeight-1][windowWidth-1] = WHITE_SPACE;
     canvas.pinContentToLayer(BACKGROUND, "BACKGROUND", 0, 0);
+    // Set special coordinates.
+    CENTRE = new int[]{windowHeight/2, windowWidth/2};
+    handCoordinates.put(Direction.NORTH, new int[]{windowHeight/4, windowWidth/2});
+    handCoordinates.put(Direction.EAST, new int[]{windowHeight/2, (3*windowWidth)/4});
+    handCoordinates.put(Direction.SOUTH, new int[]{(3*windowHeight)/4, windowWidth/2});
+    handCoordinates.put(Direction.WEST, new int[]{windowHeight/2, windowWidth/4});
+    tableCoordinates.put(Direction.NORTH, new int[]{CENTRE[0]-CARD_HEIGHT, CENTRE[1]});
+    tableCoordinates.put(Direction.EAST,  new int[]{CENTRE[0], CENTRE[1]+CARD_WIDTH});
+    tableCoordinates.put(Direction.SOUTH, new int[]{CENTRE[0+CARD_HEIGHT], CENTRE[1]});
+    tableCoordinates.put(Direction.WEST,  new int[]{CENTRE[0], CENTRE[1]-CARD_WIDTH});
   }
-  public char[][] makeOutput() {
-    return canvas.draw();
+
+  public void setData(DisplayData data) {
+    this.data = data;
   }
+  
+  /*
+  Helpful drawing functions.
+  */
+  
   /**
    * Draws a partial card template to a target char[][] at given coordinates.
    * @param card
@@ -151,6 +185,28 @@ public class ConsoleCardGraphics {
     target[y+1][x+1] = target[y+CARD_HEIGHT-2][x+CARD_WIDTH-2] = rank.charAt(0);
     target[y+2][x+1] = target[y+CARD_HEIGHT-3][x+CARD_WIDTH-2] = suit.charAt(0);
   }
+  
+  /*
+  Canvas producers.
+  */
+  
+  private char[][] makeString(String string) {
+    char[][] result = new char[0][string.length()];
+    for (int i=0; i<string.length(); i++) {
+      result[0][i] = string.charAt(i);
+    }
+    return result;
+  }
+  /**
+   * Makes a char[][] depicting the given card.
+   * @param card
+   * @return 
+   */
+  char[][] makeCard(Card card) {
+    char[][] cardBox = new char[CARD_HEIGHT][CARD_WIDTH];
+    drawCard(card, cardBox, 0, 0);
+    return cardBox;
+  }
   /**
    * Given a list of cards, returns a char[][] depicting them as a fan.
    * @param cards
@@ -174,26 +230,110 @@ public class ConsoleCardGraphics {
     drawCard(lastCard, hand, 0, offset);
     return hand;
   }
-  public LayeredCharCanvas.Box pinHand(List<Card> cards, int y, int x) {
-    return canvas.pinContentToLayer(makeHand(cards), "HANDS", y, x);
+  public char[][] makeHiddenHand(int cards) {
+    char[][] hand = new char[CARD_HEIGHT][CARD_WIDTH + 2*(cards-1)];
+    for (int i=0; i<cards-1; i++) {
+      LayeredCharCanvas.copyCanvas(PARTIAL_CARD, hand, 0, 2*i);
+    }
+    LayeredCharCanvas.copyCanvas(CARD, hand, 0, 2*(cards-1));
+    return hand;
   }
-  /**
-   * Makes a char[][] depicting the given card.
-   * @param card
-   * @return 
-   */
-  char[][] makeCard(Card card) {
-    char[][] cardBox = new char[CARD_HEIGHT][CARD_WIDTH];
-    drawCard(card, cardBox, 0, 0);
-    return cardBox;
+  
+  /*
+  Pinning methods.
+  These functions add a box to the layered canvas, and return a reference.
+  */
+  
+  LayeredCharCanvas.Box pinPlayer(String player, int y, int x) {
+    if (player.length() > 8) {
+      player = "TOO LONG";
+    }
+    return canvas.pinContentToLayer(makeString(player), "PLAYERS", y, x, new int[]{0,1});// One line tall, so new vertical alignment needed.
   }
+  LayeredCharCanvas.Box pinScore(String score, int y, int x) {
+    return canvas.pinContentToLayer(makeString(score), "SCORES", y, x, new int[]{0,1});// One line tall, so new vertical alignment needed.
+  }
+  LayeredCharCanvas.Box pinHand(List<Card> cards, int y, int x) {
+    return canvas.pinContentToLayer(makeHand(cards), "HANDS", y, x, new int[]{1,1});
+  }
+  LayeredCharCanvas.Box pinTableCard(Card card, int y, int x) {
+    return canvas.pinContentToLayer(makeCard(card), "TABLE", y, x, new int[]{1,1});
+  }
+  
+  /*
+  Views.
+  The view builder methods are used when a view must be built from scratch.
+  The update methods are used when an established view needs a small change.
+  */
+  
   /**
-   * Updates a box with a new hand display.  Assumes the box was being used 
-   * as a hand to begin with.
-   * @param hand
-   * @param cards 
+   * Draws the table view using the DisplayData, which is managed by GameEngine.
+   * This method is used when you want to build the view from scratch.
    */
-  void updateHand(LayeredCharCanvas.Box hand, List<Card> cards) {
-    hand.setContent(makeHand(cards));
+  void buildTableView() {
+    // Reset hash tables.
+    players = new HashMap<>();
+    scores = new HashMap<>();
+    hands = new HashMap<>();
+    tableCards = new HashMap<>();
+    // Reset canvas and re-add the background.
+    canvas.clearBoxes();
+    canvas.pinContentToLayer(BACKGROUND, "BACKGROUND", 0, 0);
+    // Construct boxes for each player.
+    for (Direction direction : Direction.values()) {
+      // build hand box
+      List<Card> hand = data.getHands().get(direction.player - 1);
+      int[] handCoords = handCoordinates.get(direction);                     // hand, player, and score are all based on the same coordinates
+      hands.put(direction, pinHand(hand, handCoords[0], handCoords[1]));
+      // build player box
+      String player = data.getPlayers().get(direction.player-1);
+      players.put(direction, pinPlayer(player, handCoords[0]+(int)Math.ceil(CARD_HEIGHT/2), 
+                                               handCoords[1]));
+      // build score box
+      String score = data.getScores().get(direction.player-1);
+      scores.put(direction, pinScore(score, handCoords[0]+(int)Math.ceil(CARD_HEIGHT/2)+1, 
+                                            handCoords[1]));
+      // build table card box
+      Card card = data.getTableCards().get(direction.player - 1);
+      int[] tableCoords = tableCoordinates.get(direction);                   // coordinates for table cards are independent from hands
+      tableCards.put(direction, pinTableCard(card, tableCoords[0], tableCoords[1]));
+    }
+  }
+  void updateHands() {
+    for (Direction direction : Direction.values()) {
+      List<Card> newHand = data.getHands().get(direction.player-1);
+      hands.get(direction).setContent(makeHand(newHand));
+    }
+  }
+  void updateScores() {
+    for (Direction direction : Direction.values()) {
+      String newScore = data.getScores().get(direction.player-1);
+      scores.get(direction).setContent(makeString(newScore));
+    }
+  }
+  void updateTableCards() {
+    for (Direction direction : Direction.values()) {
+      Card newCard = data.getTableCards().get(direction.player-1);
+      tableCards.get(direction).setContent(makeCard(newCard));
+    }
+  }
+  
+  /*
+  Printing
+  */
+  
+  String produceOutput() {
+    String output = "";
+    for (char[] row : canvas.draw()) {
+      for (int i=0; i<row.length; i++) {
+        output+= String.valueOf(row[i]);
+      }
+      output += "\n";
+    }
+    return output;
+  }
+  public void drawTable() {
+    buildTableView();
+    System.out.println(produceOutput());
   }
 }

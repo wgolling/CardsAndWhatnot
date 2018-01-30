@@ -25,7 +25,7 @@ package cardsandwhatnot.io.console;
 
 import java.util.*;
 import java.lang.Math;
-import cardsandwhatnot.lib.DisplayData;
+import cardsandwhatnot.io.DisplayData;
 import cardsandwhatnot.lib.Card;
 
 /**

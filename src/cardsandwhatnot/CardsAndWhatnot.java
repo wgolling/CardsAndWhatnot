@@ -24,7 +24,8 @@
 package cardsandwhatnot;
 
 import cardsandwhatnot.io.console.ConsoleCardGraphics;
-import cardsandwhatnot.lib.StandardDeck;
+import cardsandwhatnot.lib.*;
+import java.util.*;
 
 /**
  *
@@ -40,16 +41,22 @@ public class CardsAndWhatnot {
   }
   
   static void trySomeGraphics() {
-    ConsoleCardGraphics graphics = new ConsoleCardGraphics(40,125);
-    graphics.pinHand( (new StandardDeck()).getCards(), 5, 5);
-    String output = "";
-    for (char[] row : graphics.makeOutput()) {
-      for (int i=0; i<row.length; i++) {
-        output+= String.valueOf(row[i]);
-      }
-      output += "\n";
-    }
-    System.console().format("%s", output);
+//    ConsoleCardGraphics graphics = new ConsoleCardGraphics(40,125);
+//    StandardDeck deck = new StandardDeck();
+//    deck.shuffle();
+//    Map<Integer, Hand> hands = deck.deal(4, 13);
+//    graphics.pinHand( hands.get(1).getCards(), graphics.NORTH[0], graphics.NORTH[1]);
+//    graphics.pinHand( hands.get(2).getCards(), graphics.EAST[0], graphics.EAST[1]);
+//    graphics.pinHand( hands.get(3).getCards(), graphics.SOUTH[0], graphics.SOUTH[1]);
+//    graphics.pinHand( hands.get(4).getCards(), graphics.WEST[0], graphics.WEST[1]);
+//    String output = "";
+//    for (char[] row : graphics.makeOutput()) {
+//      for (int i=0; i<row.length; i++) {
+//        output+= String.valueOf(row[i]);
+//      }
+//      output += "\n";
+//    }
+//    System.console().format("%s", output);
   }
   
 }

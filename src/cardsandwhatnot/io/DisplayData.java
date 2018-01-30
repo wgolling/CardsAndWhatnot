@@ -21,7 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package cardsandwhatnot.lib;
+package cardsandwhatnot.io;
+
+import cardsandwhatnot.lib.Card;
+import java.util.*;
 
 /**
  *
@@ -29,47 +32,49 @@ package cardsandwhatnot.lib;
  */
 public class DisplayData {
   // Indexes players in turn order;
-  String[] players; 
-  int[] scores;
+  List<String> players; 
+  List<String> scores;
   // Indexes hands, first variable indexes players, second cards in hand
   // Each card must is represented as "Rank.symbol()Suit.symbol()"
-  String[][] hands; 
+  List<List<Card>> hands; 
   // Indexes cards on table, first variable indexes piles
-  String[][] tableCards; 
+  List<Card> tableCards; 
+  int currentPlayer;
   
-  public DisplayData(String[] players, int[] scores, 
-                     String[][] hands, String[][] tableCards ) {
+  public DisplayData(List<String> players, List<String> scores, 
+                     List<List<Card>> hands, List<Card> tableCards ) {
     this.players = players;
     this.scores = scores;
     this.hands = hands;
     this.tableCards = tableCards;
+    currentPlayer = 0;
   }
   public DisplayData() {
-    this(new String[0], new int[0], new String[0][0], new String[0][0]);
+    this(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
   }
 
-  public String[] getPlayers() {
+  public List<String> getPlayers() {
     return players;
   }
-  public void setPlayers(String[] players) {
+  public void setPlayers(List<String> players) {
     this.players = players;
   }
-  public int[] getScores() {
+  public List<String> getScores() {
     return scores;
   }
-  public void setScores(int[] scores) {
+  public void setScores(List<String> scores) {
     this.scores = scores;
   }
-  public String[][] getHands() {
+  public List<List<Card>> getHands() {
     return hands;
   }
-  public void setHands(String[][] hands) {
+  public void setHands(List<List<Card>> hands) {
     this.hands = hands;
   }
-  public String[][] getTableCards() {
+  public List<Card> getTableCards() {
     return tableCards;
   }
-  public void setTableCards(String[][] tableCards) {
+  public void setTableCards(List<Card> tableCards) {
     this.tableCards = tableCards;
   }
 }

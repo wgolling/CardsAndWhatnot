@@ -180,6 +180,11 @@ public class LayeredCharCanvas {
       Arrays.fill(row, TRANSPARENT);
     }
   }
+  public void clearBoxes() {
+    for (Layer layer : layers) {
+      layer.clearBoxes();
+    }
+  }
   void addLayer(String layerName) {
     layers.add(new Layer(layerName));
   }
@@ -198,6 +203,11 @@ public class LayeredCharCanvas {
     }
     layer.addBox(box);
     return box;
+  }
+  Box pinContentToLayer(char[][] content, String layerName, int y, int x, int[] alignment) {
+    Box box = new Box(content, y, x);
+    box.align(alignment);
+    return addBoxToLayer(box, layerName);
   }
   Box pinContentToLayer(char[][] content, String layerName, int y, int x) {
     return addBoxToLayer(new Box(content, y, x), layerName);
