@@ -46,11 +46,11 @@ public class Hand {
   public int size() {
     return cards.size();
   }
-  void addCard(Card card) {
+  public void addCard(Card card) {
     cards.add(card);
     sort();
   }
-  void addCards(List<Card> otherCards) {
+  public void addCards(List<Card> otherCards) {
     for (Card card : otherCards) {
       cards.add(card);
     }
@@ -71,5 +71,29 @@ public class Hand {
   public void sort() {
     Collections.sort(cards);
   }
- 
+  
+  public boolean hasSuit(ValueTextEnum suit){
+    for (Card card : cards) {
+      if (card.getSuit() == suit) {
+        return true;
+      }
+    }
+    return false;
+  }
+  public boolean hasRank(ValueTextEnum rank){
+    for (Card card : cards) {
+      if (card.getRank() == rank) {
+        return true;
+      }
+    }
+    return false;
+  }
+  public boolean hasCard(Card other) {
+    for (Card card : cards) {
+      if (card.getRank() == other.getRank() && card.getSuit() == other.getSuit()) {
+        return true;
+      }
+    }
+    return false;
+  }
 }

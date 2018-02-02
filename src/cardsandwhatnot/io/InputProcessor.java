@@ -33,7 +33,7 @@ package cardsandwhatnot.io;
  *    return a valid id for an appropriate object, or null if none exist.
 */
 public interface InputProcessor {
-  String[] parseCard(String rank, String suit);
-  String   parseGame(String gameName);
-  String   parsePlayer(String playerName);
+  String[] promptCard(String message);
+  String   promptGame(String message);
+  String   promptPlayer(String message);
 }

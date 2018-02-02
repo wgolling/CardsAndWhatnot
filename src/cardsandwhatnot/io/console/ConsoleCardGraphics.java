@@ -24,7 +24,7 @@
 package cardsandwhatnot.io.console;
 
 import cardsandwhatnot.lib.Card;
-import cardsandwhatnot.io.DisplayData;
+import cardsandwhatnot.io.*;
 import java.util.*;
 
 /**
@@ -32,7 +32,7 @@ import java.util.*;
  * uses a LayeredCanvas to arrange and display them.
  * @author William Gollinger
  */
-public class ConsoleCardGraphics {
+public class ConsoleCardGraphics implements GraphicsEngine {
   // TODO: use DisplayData to produce table view, score view etc.
   
   public enum Direction {
@@ -131,16 +131,18 @@ public class ConsoleCardGraphics {
     canvas.pinContentToLayer(BACKGROUND, "BACKGROUND", 0, 0);
     // Set special coordinates.
     CENTRE = new int[]{windowHeight/2, windowWidth/2};
-    handCoordinates.put(Direction.NORTH, new int[]{windowHeight/4, windowWidth/2});
-    handCoordinates.put(Direction.EAST, new int[]{windowHeight/2, (3*windowWidth)/4});
-    handCoordinates.put(Direction.SOUTH, new int[]{(3*windowHeight)/4, windowWidth/2});
-    handCoordinates.put(Direction.WEST, new int[]{windowHeight/2, windowWidth/4});
-    tableCoordinates.put(Direction.NORTH, new int[]{CENTRE[0]-CARD_HEIGHT, CENTRE[1]});
-    tableCoordinates.put(Direction.EAST,  new int[]{CENTRE[0], CENTRE[1]+CARD_WIDTH});
-    tableCoordinates.put(Direction.SOUTH, new int[]{CENTRE[0+CARD_HEIGHT], CENTRE[1]});
-    tableCoordinates.put(Direction.WEST,  new int[]{CENTRE[0], CENTRE[1]-CARD_WIDTH});
+    handCoordinates = new HashMap<>();
+    handCoordinates.put(Direction.NORTH, new int[]{windowHeight/7, windowWidth/2});
+    handCoordinates.put(Direction.EAST, new int[]{windowHeight/2, (4*windowWidth)/5});
+    handCoordinates.put(Direction.SOUTH, new int[]{(6*windowHeight)/7, windowWidth/2});
+    handCoordinates.put(Direction.WEST, new int[]{windowHeight/2, windowWidth/5});
+    tableCoordinates = new HashMap<>();
+    tableCoordinates.put(Direction.NORTH, new int[]{CENTRE[0]-CARD_HEIGHT+2, CENTRE[1]});
+    tableCoordinates.put(Direction.EAST,  new int[]{CENTRE[0], CENTRE[1]+CARD_WIDTH+1});
+    tableCoordinates.put(Direction.SOUTH, new int[]{CENTRE[0]+CARD_HEIGHT-2, CENTRE[1]});
+    tableCoordinates.put(Direction.WEST,  new int[]{CENTRE[0], CENTRE[1]-CARD_WIDTH-1});
   }
-
+  @Override
   public void setData(DisplayData data) {
     this.data = data;
   }
@@ -191,7 +193,7 @@ public class ConsoleCardGraphics {
   */
   
   private char[][] makeString(String string) {
-    char[][] result = new char[0][string.length()];
+    char[][] result = new char[1][string.length()];
     for (int i=0; i<string.length(); i++) {
       result[0][i] = string.charAt(i);
     }
@@ -332,6 +334,7 @@ public class ConsoleCardGraphics {
     }
     return output;
   }
+  @Override
   public void drawTable() {
     buildTableView();
     System.out.println(produceOutput());

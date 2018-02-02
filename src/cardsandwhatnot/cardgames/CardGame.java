@@ -37,8 +37,10 @@ public class CardGame {
   String cardType;
   String UIType;
   List<Player> players;
+  List<Hand> hands;
+  List<Integer> scores;
   int currentPlayer;
-  Deck gameDeck;
+  public Deck gameDeck;
   List<Card> tableCards;
   boolean roundOver;
   boolean gameOver;
@@ -51,6 +53,10 @@ public class CardGame {
     cardType = "BLANK";
     UIType = "BLANK";
     this.players = players;
+    hands = new ArrayList<>();
+    for (Player player : players) {
+      hands.add(player.getHand());
+    }
     currentPlayer = 0;
     gameDeck = null; // Should be set by game; e.g. Hearts and Uno use different decks.
     tableCards = new ArrayList<>();
@@ -59,6 +65,7 @@ public class CardGame {
   }
   @Override
   public String toString() {return name;}
+  public void setName(String name) {this.name = name;}
   public String getCardType() {return cardType;}
   List<Player> getPlayers() {return players;}
   int getCurrentPlayer() {return currentPlayer;}
@@ -90,6 +97,7 @@ public class CardGame {
       resolveRound();
     }
     resolveGame(); 
+    // display final results
   }
   /* 
   * To write new CardGame, just have to override the methods below.
@@ -104,11 +112,11 @@ public class CardGame {
     // implement AI for chosing a card
     return null;
   }
-  private void setupGame(){}
-  private void resolveGame(){}
-  private void setupRound(){}
-  private void resolveRound(){}
-  private void setupPlay(){}
-  private void resolvePlay(Card card){}
+  void setupGame(){}
+  void resolveGame(){}
+  void setupRound(){}
+  void resolveRound(){}
+  void setupPlay(){}
+  void resolvePlay(Card card){}
   
 }

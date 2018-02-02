@@ -25,6 +25,7 @@ package cardsandwhatnot;
 
 import cardsandwhatnot.io.console.ConsoleCardGraphics;
 import cardsandwhatnot.lib.*;
+import cardsandwhatnot.io.DisplayData;
 import java.util.*;
 
 /**
@@ -41,10 +42,23 @@ public class CardsAndWhatnot {
   }
   
   static void trySomeGraphics() {
-//    ConsoleCardGraphics graphics = new ConsoleCardGraphics(40,125);
-//    StandardDeck deck = new StandardDeck();
-//    deck.shuffle();
-//    Map<Integer, Hand> hands = deck.deal(4, 13);
+    ConsoleCardGraphics graphics = new ConsoleCardGraphics(40,125);
+    StandardDeck deck = new StandardDeck();
+    deck.shuffle();
+    Map<Integer, Hand> dealtHands = deck.deal(4, 13);
+    List<String> players = Arrays.asList("Burt", "Doug", "Alphonse", "Terry");
+    List<String> scores = Arrays.asList("20", "40", "4", "6");
+    List<List<Card>> hands = new ArrayList<>();
+    for (int i=1; i<5; i++) {
+      hands.add(dealtHands.get(i).getCards());
+    }
+    List<Card> tableCards = Arrays.asList(new StandardCard(StandardCard.Rank.ACE, StandardCard.Suit.SPADES),
+                                          new StandardCard(StandardCard.Rank.QUEEN, StandardCard.Suit.SPADES),
+                                          new StandardCard(StandardCard.Rank.TWO, StandardCard.Suit.CLUBS),
+                                          new StandardCard(StandardCard.Rank.TEN, StandardCard.Suit.DIAMONDS));
+    DisplayData data = new DisplayData(players, scores, hands, tableCards);
+    graphics.setData(data);
+    graphics.drawTable();
 //    graphics.pinHand( hands.get(1).getCards(), graphics.NORTH[0], graphics.NORTH[1]);
 //    graphics.pinHand( hands.get(2).getCards(), graphics.EAST[0], graphics.EAST[1]);
 //    graphics.pinHand( hands.get(3).getCards(), graphics.SOUTH[0], graphics.SOUTH[1]);

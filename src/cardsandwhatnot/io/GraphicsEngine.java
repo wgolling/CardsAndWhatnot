@@ -28,9 +28,6 @@ package cardsandwhatnot.io;
  * @author William Gollinger
  */
 public interface GraphicsEngine {
-  void addLayer();
-  void addLayers(int amount);
-  void pinBoxToLayer(int layer, Object content, int x, int y);
-  void resetLayer(int layer);
-  void display();
+  void setData(DisplayData data);
+  void drawTable();
 }
