@@ -23,10 +23,12 @@
  */
 package cardsandwhatnot;
 
-import cardsandwhatnot.io.console.ConsoleCardGraphics;
+import cardsandwhatnot.cardgames.*;
+import cardsandwhatnot.io.console.*;
 import cardsandwhatnot.lib.*;
 import cardsandwhatnot.io.DisplayData;
 import java.util.*;
+import java.util.stream.*;
 
 /**
  *
@@ -38,7 +40,24 @@ public class CardsAndWhatnot {
    * @param args the command line arguments
    */
   public static void main(String[] args) {
-    trySomeGraphics();
+    // Make players.
+    Player burt = new Player("Burt", "", true);
+    Player doug = new Player("Doug", "", false);
+    Player alphonse = new Player("Alphonse", "", false);
+    Player terry = new Player("Terry", "", false);
+    // Set up player lists.
+    List<Player> players = Arrays.asList(burt, doug, alphonse, terry);
+    List<String> playerNames = players.stream().map(e -> e.getName()).collect(Collectors.toList());
+    // Set up games list.
+    List<String> gameNames = Arrays.asList("HEARTS");
+    // Set up graphics and input.
+    ConsoleCardGraphics graphics = new ConsoleCardGraphics(40, 125);
+    ConsoleInputProcessor input = new ConsoleInputProcessor(gameNames, playerNames);
+    // Load game with players.
+    Hearts hearts = new Hearts(players);
+    // Load game engine with game and graphics + input.
+    CardGameEngine engine = new CardGameEngine(hearts, graphics, input);
+    engine.playGame();
   }
   
   static void trySomeGraphics() {

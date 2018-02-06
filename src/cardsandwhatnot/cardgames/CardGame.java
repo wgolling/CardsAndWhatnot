@@ -27,6 +27,7 @@ import cardsandwhatnot.io.DisplayData;
 import java.util.*;
 import cardsandwhatnot.lib.*;
 import cardsandwhatnot.io.CardGameUI;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -42,11 +43,11 @@ public class CardGame {
   int currentPlayer;
   public Deck gameDeck;
   List<Card> tableCards;
+  boolean trickOver;
   boolean roundOver;
   boolean gameOver;
   
   CardGameUI UI;
-  DisplayData data; // A data package to send to the UI.
   
   public CardGame(List<Player> players) {
     name = "BLANK";
@@ -57,11 +58,11 @@ public class CardGame {
     for (Player player : players) {
       hands.add(player.getHand());
     }
+    scores = new ArrayList<>();
     currentPlayer = 0;
     gameDeck = null; // Should be set by game; e.g. Hearts and Uno use different decks.
     tableCards = new ArrayList<>();
-    roundOver = (gameOver = false); 
-    data = new DisplayData();
+    trickOver = roundOver = gameOver = true; 
   }
   @Override
   public String toString() {return name;}
@@ -69,7 +70,7 @@ public class CardGame {
   public String getCardType() {return cardType;}
   List<Player> getPlayers() {return players;}
   int getCurrentPlayer() {return currentPlayer;}
-  
+    
   // move these two to GameEngine?
   // returns a valid card, according to the game's validatePlay method
   Card requestCard(Player player) {
@@ -113,10 +114,12 @@ public class CardGame {
     return null;
   }
   void setupGame(){}
-  void resolveGame(){}
   void setupRound(){}
-  void resolveRound(){}
+  void setupTrick() {}
   void setupPlay(){}
   void resolvePlay(Card card){}
+  void resolveTrick() {}
+  void resolveRound(){}
+  void resolveGame(){}
   
 }

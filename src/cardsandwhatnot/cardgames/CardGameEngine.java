@@ -23,6 +23,9 @@
  */
 package cardsandwhatnot.cardgames;
 
+import java.util.List;
+import java.util.stream.*;
+
 import cardsandwhatnot.io.*;
 import cardsandwhatnot.lib.Card;
 import cardsandwhatnot.lib.Player;
@@ -35,51 +38,115 @@ import cardsandwhatnot.lib.StandardCard;
 public class CardGameEngine {
   
   CardGame game;
+  DisplayData data;
   GraphicsEngine graphics;
   InputProcessor parser;
   
   public CardGameEngine(CardGame game, GraphicsEngine graphics, InputProcessor parser) {
     this.game = game;
+    data = new DisplayData();
     this.graphics = graphics;
-    this.graphics.setData(game.data);
+    this.graphics.setData(data);
     this.parser = parser;
   }
-  
+  /**
+   * Runs through the "game" and "round" loops and executing "plays", 
+   * calling the Game's corresponding setup- and resolve- methods.
+   */
   public void playGame() {
     game.setupGame();
-    while (!game.gameOver) {
+    while (game.gameOver == false) {
       game.setupRound();
       do {
-        game.setupPlay();
-        Card play = requestCard(game.players.get(game.currentPlayer));
-        game.resolvePlay(play);
-      } while(!game.roundOver); // If roundOver always true, each "Round" only has one Play.
+        game.setupTrick();
+        do {
+          game.setupPlay();
+          Card play = requestCard(game.players.get(game.currentPlayer));
+          game.resolvePlay(play);
+        } while(game.trickOver == false);
+        game.resolveTrick();
+        promptContinue("");
+      } while(game.roundOver == false); // If roundOver always true, each "Round" only has one Play.
       game.resolveRound();
+      // TODO pause, display round results
+      promptContinue("");
     }
     game.resolveGame(); 
-    // display final results
+    // TODO display final results
   }
-  // returns a valid card, according to the game's validatePlay method
+  /**
+   * Updates the DisplayData field.  
+   * This automatically updates graphics' data too, since it is a reference to
+   * the same object.
+   */
+  void updateData() {
+    data.setPlayers(game.players
+            .stream().map(e -> e.getName()).collect(Collectors.toList()) );   // java y u no hav succinct functional operations
+    data.setScores(game.scores
+            .stream().map(e -> Integer.toString(e)).collect(Collectors.toList()) );
+    data.setHands(game.players
+            .stream().map(e -> e.getHand().getCards() ).collect(Collectors.toList()) );
+    data.setTableCards(game.tableCards);
+    data.currentPlayer = game.currentPlayer;
+  }
+  /**
+   * Returns a card from the Player's hand, which is valid according to
+   * the Game's validatePlay method.
+   * @param player
+   * @return 
+   */
   Card requestCard(Player player) {
     Card card;
     if (player.isHuman()) {
       card = promptCard();
-      while (!game.validatePlay(card)) {
-        card = promptCard();
+      String message = "I think you said " + card.toString() + "\n";
+      while (!game.validatePlay(card) || !(player.getHand().hasCard(card))) {
+        if ( !(player.getHand().hasCard(card)) ) {
+          message += player.getName() + " doesn't have " + card.toString() +".\n";
+        }
+        if (!game.validatePlay(card)) {
+          message += "Not a valid Play.\n";
+        }
+        card = promptCard(message);
       }
     } else {
       card = game.defaultCard();
     }
+    player.getHand().removeCard(card);
     return card;
   }
-  // Use graphics and parser to get a Card from a human user.
-  Card promptCard() {
+  
+  /*
+  prompts
+  */
+  
+  /**
+   * A prompt to put breaks in the action.
+   * @param message 
+   */
+  void promptContinue(String message) {
+    updateData();
     graphics.drawTable();
-    Card card = validateCard(parser.promptCard(""));
+    parser.promptContinue(message);
+  }
+  /**
+   * Attempts to get a Card from the user.
+   * Will not return a non-null value.
+   * @param message
+   * @return 
+   */
+  Card promptCard(String message) {
+    Player player = game.players.get(game.currentPlayer);
+    updateData();
+    graphics.drawTableWithCardPrompt();
+    Card card = validateCard(parser.promptCard(message));
     while (card == null) {
       card = validateCard(parser.promptCard("Card not recognized."));
     }
     return card;
+  }
+  Card promptCard() {
+    return promptCard("");
   }
   /**
    * Determines if cardParts represent a card of the given type.

@@ -36,4 +36,5 @@ public interface InputProcessor {
   String[] promptCard(String message);
   String   promptGame(String message);
   String   promptPlayer(String message);
+  void     promptContinue(String message);
 }

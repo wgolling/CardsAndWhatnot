@@ -35,19 +35,13 @@ public class Player {
   boolean isHuman;
   Map<String, Integer> wins;
   Hand hand;
-  
+    
   public Player(String name, String password, boolean isHuman) {
     this.name = name;
     this.password = password;
     this.isHuman = isHuman;
     wins = new HashMap<>();
     hand = new Hand();
-  }
-  // if a player's stats are on file, construct with optional wins parameter
-  public Player(String name, String password, boolean isHuman, 
-           Map<String, Integer> wins) {
-    this(name, password, isHuman);
-    this.wins = wins;
   }
   
   public String getName() {

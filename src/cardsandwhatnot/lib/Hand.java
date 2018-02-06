@@ -40,6 +40,13 @@ public class Hand {
     sort();
   }
 
+  public String toString() {
+    String hand = "";
+    for (Card card : cards) {
+      hand += card.toString() + "\n";
+    }
+    return (hand.equals("")) ? "EMPTY" : hand;
+  }
   public List<Card> getCards() {
     return cards;
   }
@@ -47,8 +54,7 @@ public class Hand {
     return cards.size();
   }
   public void addCard(Card card) {
-    cards.add(card);
-    sort();
+    addCards(Arrays.asList(card));
   }
   public void addCards(List<Card> otherCards) {
     for (Card card : otherCards) {
@@ -58,15 +64,18 @@ public class Hand {
   }
   // For removeCards it is important that subCards be a subset of cards.
   // It will return null otherwise.
-  boolean removeCards(List<Card> subCards) {
+  public List<Card> removeCards(List<Card> subCards) {
     List<Card> cardsCopy = cards;
     for (Card card : subCards) {
       if (!cardsCopy.remove(card)) {
-        return false;
+        return null;
       }
     }
     cards = cardsCopy;
-    return true;
+    return subCards;
+  }
+  public Card removeCard(Card card) {
+    return (cards.remove(card)) ? card : null;
   }
   public void sort() {
     Collections.sort(cards);
@@ -90,10 +99,29 @@ public class Hand {
   }
   public boolean hasCard(Card other) {
     for (Card card : cards) {
-      if (card.getRank() == other.getRank() && card.getSuit() == other.getSuit()) {
+      if (card.equals(other)) {
         return true;
       }
     }
     return false;
+  }
+  public Card getFirst(ValueTextEnum suit) {
+    for (Card card : cards) {
+      if (card.getSuit() == suit) {
+        return card;
+      }
+    }
+    return null;
+  }
+  public Card getLast(ValueTextEnum suit) {
+    boolean found = false;
+    for (int i=0; i < cards.size(); i++) {
+      if (cards.get(i).getSuit() == suit) {
+        found = true;
+      } else if (found == true) {
+        return cards.get(i-1);
+      }
+    }
+    return cards.get(cards.size()-1);
   }
 }

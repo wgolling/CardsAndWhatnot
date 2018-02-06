@@ -39,7 +39,7 @@ public class DisplayData {
   List<List<Card>> hands; 
   // Indexes cards on table, first variable indexes piles
   List<Card> tableCards; 
-  int currentPlayer;
+  public int currentPlayer;
   
   public DisplayData(List<String> players, List<String> scores, 
                      List<List<Card>> hands, List<Card> tableCards ) {
@@ -53,26 +53,31 @@ public class DisplayData {
     this(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
   }
 
+  /*
+  DisplayData instances may contain references to delicate information, like a Player's cards.
+  Its getting functions thus return a copy of the list.
+  */
   public List<String> getPlayers() {
-    return players;
-  }
-  public void setPlayers(List<String> players) {
-    this.players = players;
+    return new ArrayList<>(players);
   }
   public List<String> getScores() {
-    return scores;
+    return new ArrayList<>(scores);
+  }
+  public List<List<Card>> getHands() {
+    return new ArrayList<>(hands);
+  }
+  public List<Card> getTableCards() {
+    return new ArrayList<>(tableCards);
+  }
+  // special getter methods => non-public fields => setter mothods
+  public void setPlayers(List<String> players) {
+    this.players = players;
   }
   public void setScores(List<String> scores) {
     this.scores = scores;
   }
-  public List<List<Card>> getHands() {
-    return hands;
-  }
   public void setHands(List<List<Card>> hands) {
     this.hands = hands;
-  }
-  public List<Card> getTableCards() {
-    return tableCards;
   }
   public void setTableCards(List<Card> tableCards) {
     this.tableCards = tableCards;

@@ -127,6 +127,14 @@ public class ConsoleInputProcessor implements InputProcessor {
     // If no valid player was found, reprompt with error message;
     return promptPlayer("Player not recognized.");
   }
+  /**
+   * "Press the Any key."
+   * @param message 
+   */
+  @Override
+  public void promptContinue(String message) {
+    prompt(message + "Press Enter to continue.");
+  }
   
   // Helper function for processing card input.
   // The CardGameEngine class determines if the Rank and Suit make a valid Card (depends on card type).
@@ -153,8 +161,8 @@ public class ConsoleInputProcessor implements InputProcessor {
       case "6"    : return "Six";
       case "SEVEN": return "Seven";
       case "7"    : return "Seven";
-      case "EIGHT": return "Seven";
-      case "8"    : return "Seven";
+      case "EIGHT": return "Eight";
+      case "8"    : return "Eight";
       case "NINE" : return "Nine";
       case "9"    : return "Nine";
       case "TEN"  : return "Ten";

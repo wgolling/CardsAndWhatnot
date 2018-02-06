@@ -126,8 +126,16 @@ public class StandardCard implements Card {
   }
   @Override
   public boolean equals(Object other) {
-    return (other instanceof Card && (rank == ((Card)other).getRank())
-                                  && (suit == ((Card)other).getSuit()) ) ? true : false;
+    if (other instanceof Card) {
+      if ( ((StandardCard)other).getRank() == this.rank &&
+           ((StandardCard)other).getSuit() == this.suit) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
   }
   @Override
   public int hashCode() {
