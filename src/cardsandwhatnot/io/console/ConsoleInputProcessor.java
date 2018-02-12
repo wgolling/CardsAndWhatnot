@@ -102,13 +102,19 @@ public class ConsoleInputProcessor implements InputProcessor {
   @Override
   public String promptGame(String extraMessage) {
     String input = prompt(extraMessage + "\nWhat game do you want to play?");
+    String result = parseGame(input);
+    if (result == null) {
+      return promptGame("Game not recognized.");
+    }
+    return result;
+  }
+  String parseGame(String gameName) {
     for (String game : games) {
-      if (input.toUpperCase().equals(game.toUpperCase()) ) {
+      if (gameName.toUpperCase().equals(game.toUpperCase()) ) {
         return game;
       }
     }
-    // If no valid game was found, reprompt with error message;
-    return promptGame("Game not recognized.");
+    return null;
   }
   /**
    * Prompts user for a player, with an optional message.
@@ -119,13 +125,19 @@ public class ConsoleInputProcessor implements InputProcessor {
   @Override
   public String promptPlayer(String extraMessage) {
     String input = prompt(extraMessage + "\nChoose a player.");
+    String result = parsePlayer(input);
+    if (result == null) {
+      return promptGame("Player not recognized.");
+    }
+    return result;
+  }
+  String parsePlayer(String playerName) {
     for (String player : players) {
-      if (input.equals(player) ) {
+      if (playerName.equals(player) ) { // case sensitive
         return player;
       }
     }
-    // If no valid player was found, reprompt with error message;
-    return promptPlayer("Player not recognized.");
+    return null;
   }
   /**
    * "Press the Any key."

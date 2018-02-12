@@ -41,15 +41,7 @@ public class HeartsTest {
   StandardCard QUEEN_OF_SPADES = new StandardCard(StandardCard.Rank.QUEEN, StandardCard.Suit.SPADES);
   public HeartsTest() {
   }
-  
-  @BeforeClass
-  public static void setUpClass() {
-  }
-  
-  @AfterClass
-  public static void tearDownClass() {
-  }
-  
+    
   @Before
   public void setUp() {
   }

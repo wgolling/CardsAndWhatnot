@@ -62,12 +62,11 @@ public class ConsoleInputProcessorTest {
   @Test
   public void testParseCard() {
     System.out.println("parseCard");
-    String rank = "2";
-    String suit = "cLuBs";
     ConsoleInputProcessor instance = new ConsoleInputProcessor(null,null);
+    String[] cardParts = new String[]{"2", "cLuBs"};
     String expRank = "Two";
     String expSuit = "Clubs";
-    String[] result = instance.parseCard(rank, suit);
+    String[] result = instance.parseCard(cardParts);
     assert(result[0].equals(expRank));
     assert(result[1].equals(expSuit));
   }

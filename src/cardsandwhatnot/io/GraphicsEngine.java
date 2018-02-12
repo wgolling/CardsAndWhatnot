@@ -30,5 +30,8 @@ package cardsandwhatnot.io;
 public interface GraphicsEngine {
   void setData(DisplayData data);
   void drawTable();
-  void drawTableWithCardPrompt();
+  void drawCardPrompt();
+  void drawTrickResults();
+  void drawRoundResults();
+  void drawGameResults();
 }

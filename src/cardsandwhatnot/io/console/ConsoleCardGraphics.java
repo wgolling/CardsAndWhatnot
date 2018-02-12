@@ -64,7 +64,7 @@ public class ConsoleCardGraphics implements GraphicsEngine {
   LayeredCharCanvas canvas;
   // The information used to construct views comes in a DisplayData capsule.
   DisplayData data;
-  // conveninent box collections
+  // box collections
   Map<Direction, LayeredCharCanvas.Box> players;
   Map<Direction, LayeredCharCanvas.Box> scores;
   Map<Direction, LayeredCharCanvas.Box> hands;
@@ -72,10 +72,10 @@ public class ConsoleCardGraphics implements GraphicsEngine {
   // card dimensions
   final int CARD_HEIGHT = 6;
   final int CARD_WIDTH = 5;
-  // basic graphic elements
+  // basic "graphic" elements
   final char TOP_BORDER = '-';
   final char SIDE_BORDER = '|';
-  final char UL_CORNER = ' ';
+  final char UL_CORNER = ' '; // could put stuff here but it looks weird
   final char UR_CORNER = ' ';
   final char BL_CORNER = ' ';
   final char BR_CORNER = ' ';
@@ -130,9 +130,9 @@ public class ConsoleCardGraphics implements GraphicsEngine {
     PARTIAL_CARD_WIDE = new char[CARD_HEIGHT][3];
     PARTIAL_CARD_WIDE = CARD;
     // Draw default background
-    // Background "holds the window open", in the sense that it fills it with non-null characters.
+    // Background "holds the window open" in the sense that it fills it with non-null characters.
     BACKGROUND = new char[windowHeight][windowWidth];
-    for (int i=1; i< windowWidth-1; i++) {
+    for (int i=1; i < windowWidth-1; i++) {
       BACKGROUND[0][i] = BACKGROUND[windowHeight-1][i] = TOP_BORDER;
     }
     for (int j=1; j< windowHeight-1; j++) {
@@ -158,6 +158,9 @@ public class ConsoleCardGraphics implements GraphicsEngine {
     tableCoordinates.put(Direction.SOUTH, new int[]{CENTRE[0]+CARD_HEIGHT-2, CENTRE[1]});
     tableCoordinates.put(Direction.WEST,  new int[]{CENTRE[0], CENTRE[1]-CARD_WIDTH-1});
   }
+  /**
+   * @param data 
+   */
   @Override
   public void setData(DisplayData data) {
     this.data = data;
@@ -168,7 +171,8 @@ public class ConsoleCardGraphics implements GraphicsEngine {
   */
   
   /**
-   * Draws a partial card template to a target char[][] at given coordinates.
+   * Draws a partial card to a target char[][] at given coordinates.
+   * If the card's rank has 2 characters the method will draw a wide partial card.
    * @param card
    * @param target
    * @param y
@@ -187,7 +191,7 @@ public class ConsoleCardGraphics implements GraphicsEngine {
     target[y+2][x+1] = suit.charAt(0);
   }
   /**
-   * Draws a full card template to a target char[][] at given coordinates.
+   * Draws a full card to a target char[][] at given coordinates.
    * @param card
    * @param target
    * @param y
@@ -208,6 +212,11 @@ public class ConsoleCardGraphics implements GraphicsEngine {
   Canvas producers.
   */
   
+  /**
+   * Converts a String to a char[1][string.length()].
+   * @param string
+   * @return 
+   */
   private char[][] makeString(String string) {
     char[][] result = new char[1][string.length()];
     for (int i=0; i<string.length(); i++) {
@@ -234,22 +243,25 @@ public class ConsoleCardGraphics implements GraphicsEngine {
    * @return 
    */
   public char[][] makeHand(List<Card> cards) {
+    if (cards.isEmpty()) {
+      return new char[1][1];
+    }
     if (cards.size() == 1) {
       return makeCard(cards.get(0));
     }
     // Don't change original cards reference
-    List<Card> cardsCopy = new ArrayList<>();
+    List<Card> fanCards = new ArrayList<>();
     for (int i=0; i<cards.size()-1; i++) {
-      cardsCopy.add(cards.get(i));
+      fanCards.add(cards.get(i));
     }
     Card lastCard = cards.get(cards.size()-1);
     int fanWidth = 0;
-    for (Card card : cardsCopy) {
+    for (Card card : fanCards) {
       fanWidth += 1 + card.rankWidth();
     }
     char[][] hand = new char[CARD_HEIGHT][fanWidth+CARD_WIDTH];
     int offset = 0;
-    for (Card card : cardsCopy) {
+    for (Card card : fanCards) {
       drawPartialCard(card, hand, 0, offset);
       offset += 1 + card.rankWidth();
     }
@@ -257,6 +269,9 @@ public class ConsoleCardGraphics implements GraphicsEngine {
     return hand;
   }
   public char[][] makeHiddenHand(int cards) {
+    if (cards == 0) {
+      return new char[1][1];
+    }
     char[][] hand = new char[CARD_HEIGHT][CARD_WIDTH + 2*(cards-1)];
     for (int i=0; i<cards-1; i++) {
       LayeredCharCanvas.copyCanvas(PARTIAL_CARD, hand, 0, 2*i);
@@ -310,32 +325,32 @@ public class ConsoleCardGraphics implements GraphicsEngine {
     canvas.pinContentToLayer(BACKGROUND, "BACKGROUND", 0, 0);
     // Construct boxes for each player.
     for (Direction direction : Direction.values()) {
-      int playerPos = direction.player - 1;
+      int player = direction.player - 1;
       // build hand box
-      List<Card> hand = data.getHands().get(playerPos);
+      List<Card> hand = data.getHands().get(player);
       int[] handCoords = handCoordinates.get(direction);                     // hand, player, and score are all based on the same coordinates
-      if (playerPos == data.currentPlayer) {
+      if (player == data.getCurrentPlayer()) {
         hands.put(direction, pinHand(hand, handCoords[0], handCoords[1]));
       } else {
         hands.put(direction, pinHiddenHand(hand.size(), handCoords[0], handCoords[1]));
       }
       // build player box
-      String player = data.getPlayers().get(playerPos);
-      players.put(direction, pinPlayer(player, handCoords[0]+(int)Math.ceil(CARD_HEIGHT/2), 
+      String playerString = data.getPlayers().get(player);
+      players.put(direction, pinPlayer(playerString, handCoords[0]+(int)Math.ceil(CARD_HEIGHT/2), 
                                                handCoords[1]));
       // build score box
-      String score = data.getScores().get(playerPos);
+      String score = data.getScores().get(player);
       scores.put(direction, pinScore(score, handCoords[0]+(int)Math.ceil(CARD_HEIGHT/2)+1, 
                                             handCoords[1]));
       // build table card box
-      Card card = data.getTableCards().get(playerPos);
+      Card card = data.getTableCards().get(player);
       int[] tableCoords = tableCoordinates.get(direction);                   // coordinates for table cards are independent from hands
       tableCards.put(direction, pinTableCard(card, tableCoords[0], tableCoords[1]));
     }
   }
   void buildTableViewWithCardPrompt() {
     buildTableView();
-    Direction current = Direction.intToDirection(data.currentPlayer);
+    Direction current = Direction.intToDirection(data.getCurrentPlayer()+1);
     tableCards.get(current).setContent(current.arrowBox());
   }
   void updateHands() {
@@ -377,11 +392,34 @@ public class ConsoleCardGraphics implements GraphicsEngine {
     System.out.println(produceOutput());
   }
   @Override
-  public void drawTableWithCardPrompt() {
+  public void drawCardPrompt() {
     buildTableView();
     // draw an arrow pointing to current player
-    Direction current = Direction.intToDirection(data.currentPlayer + 1);
+    Direction current = Direction.intToDirection(data.getCurrentPlayer()+1);
     tableCards.get(current).setContent(current.arrowBox());
+    System.out.println(produceOutput());
+  }
+  @Override
+  public void drawTrickResults() {
+    buildTableView();
+    System.out.println("DrawTrickResults, current player: " + data.getCurrentPlayer());
+    Direction winner = Direction.intToDirection(data.getCurrentPlayer()+1);
+    canvas.pinContentToLayer(winner.arrowBox(), "TABLE", CENTRE[0], CENTRE[1]);
+    System.out.println(produceOutput());
+  }
+  @Override
+  public void drawRoundResults() {
+    buildTableView();
+    // TODO? show taken cards
+    for (Direction direction :  Direction.values()) {
+      String score = data.getScores().get(direction.player - 1);
+      tableCards.get(direction).setContent(makeString(score));
+    }
+    System.out.println(produceOutput());
+  }
+  @Override
+  public void drawGameResults() {
+    // indicate winner
     System.out.println(produceOutput());
   }
 }

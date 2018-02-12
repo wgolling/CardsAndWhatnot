@@ -93,9 +93,10 @@ public class PlayerTest {
     int result = instance.getWins(gameName);
     assertEquals(expResult, result);
     assertEquals(0, instance.getWins("BUTT"));
-    Map<String, Integer> wins = new HashMap<>();
-    wins.put("BUTT", 7);
-    Player testPlayer2 = new Player("TEST2", "PASS2", true, wins);
+    Player testPlayer2 = new Player("TEST2", "PASS2", true);
+    for (int i=0; i<7; i++) {
+      testPlayer2.winGame("BUTT");
+    }
     assertEquals(7, testPlayer2.getWins("BUTT"));
   }
 

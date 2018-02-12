@@ -50,8 +50,8 @@ public class CardGameEngine {
     this.parser = parser;
   }
   /**
-   * Runs through the "game" and "round" loops and executing "plays", 
-   * calling the Game's corresponding setup- and resolve- methods.
+   * Runs through the "game", "round", and "trick" loops, executing "plays". 
+   * Calls the Game's corresponding setup- and resolve- methods.
    */
   public void playGame() {
     game.setupGame();
@@ -65,18 +65,18 @@ public class CardGameEngine {
           game.resolvePlay(play);
         } while(game.trickOver == false);
         game.resolveTrick();
-        promptContinue("");
+        System.out.println("Trick resolved, current player: " + game.currentPlayer);
+        promptTrickOver("Trick Over\n");
       } while(game.roundOver == false); // If roundOver always true, each "Round" only has one Play.
       game.resolveRound();
-      // TODO pause, display round results
-      promptContinue("");
+      promptRoundOver("Round Over\n");
     }
     game.resolveGame(); 
-    // TODO display final results
+    promptGameOver("Game Over\n");
   }
   /**
    * Updates the DisplayData field.  
-   * This automatically updates graphics' data too, since it is a reference to
+   * This automatically updates graphics' data as well, since it refers to 
    * the same object.
    */
   void updateData() {
@@ -87,7 +87,7 @@ public class CardGameEngine {
     data.setHands(game.players
             .stream().map(e -> e.getHand().getCards() ).collect(Collectors.toList()) );
     data.setTableCards(game.tableCards);
-    data.currentPlayer = game.currentPlayer;
+    data.setCurrentPlayer(game.currentPlayer);
   }
   /**
    * Returns a card from the Player's hand, which is valid according to
@@ -121,12 +121,27 @@ public class CardGameEngine {
   */
   
   /**
-   * A prompt to put breaks in the action.
+   * A basic prompt to put breaks in the action.
    * @param message 
    */
   void promptContinue(String message) {
     updateData();
     graphics.drawTable();
+    parser.promptContinue(message);
+  }
+  void promptTrickOver(String message) {
+    updateData();
+    graphics.drawTrickResults();
+    parser.promptContinue(message);
+  }
+  void promptRoundOver(String message) {
+    updateData();
+    graphics.drawRoundResults();
+    parser.promptContinue(message);
+  }
+  void promptGameOver(String message) {
+    updateData();
+    graphics.drawGameResults();
     parser.promptContinue(message);
   }
   /**
@@ -136,9 +151,8 @@ public class CardGameEngine {
    * @return 
    */
   Card promptCard(String message) {
-    Player player = game.players.get(game.currentPlayer);
     updateData();
-    graphics.drawTableWithCardPrompt();
+    graphics.drawCardPrompt();
     Card card = validateCard(parser.promptCard(message));
     while (card == null) {
       card = validateCard(parser.promptCard("Card not recognized."));

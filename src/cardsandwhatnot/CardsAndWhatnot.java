@@ -41,7 +41,7 @@ public class CardsAndWhatnot {
    */
   public static void main(String[] args) {
     // Make players.
-    Player burt = new Player("Burt", "", true);
+    Player burt = new Player("Burt", "", false);
     Player doug = new Player("Doug", "", false);
     Player alphonse = new Player("Alphonse", "", false);
     Player terry = new Player("Terry", "", false);

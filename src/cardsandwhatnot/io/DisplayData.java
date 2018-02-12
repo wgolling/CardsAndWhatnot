@@ -31,15 +31,15 @@ import java.util.*;
  * @author William Gollinger
  */
 public class DisplayData {
+  // TODO? amalgamate into a List of PlayerState objects
   // Indexes players in turn order;
-  List<String> players; 
-  List<String> scores;
-  // Indexes hands, first variable indexes players, second cards in hand
-  // Each card must is represented as "Rank.symbol()Suit.symbol()"
+  List<String>     players; 
+  List<String>     scores;
+  List<String>     roundScores;
   List<List<Card>> hands; 
-  // Indexes cards on table, first variable indexes piles
-  List<Card> tableCards; 
-  public int currentPlayer;
+  List<List<Card>> takenCards;
+  List<Card>       tableCards; 
+  int currentPlayer;
   
   public DisplayData(List<String> players, List<String> scores, 
                      List<List<Card>> hands, List<Card> tableCards ) {
@@ -55,7 +55,7 @@ public class DisplayData {
 
   /*
   DisplayData instances may contain references to delicate information, like a Player's cards.
-  Its getting functions thus return a copy of the list.
+  Its getting functions therefore only return a copy of the list.
   */
   public List<String> getPlayers() {
     return new ArrayList<>(players);
@@ -63,23 +63,35 @@ public class DisplayData {
   public List<String> getScores() {
     return new ArrayList<>(scores);
   }
+  public List<String> getRoundScores() {
+    return new ArrayList<>(roundScores);
+  }
   public List<List<Card>> getHands() {
     return new ArrayList<>(hands);
   }
   public List<Card> getTableCards() {
     return new ArrayList<>(tableCards);
   }
-  // special getter methods => non-public fields => setter mothods
+  public int getCurrentPlayer() {
+    return currentPlayer;
+  }
+  // special getter methods => non-public fields => setter methods
   public void setPlayers(List<String> players) {
     this.players = players;
   }
   public void setScores(List<String> scores) {
     this.scores = scores;
   }
+  public void setRoundScores(List<String> roundScores) {
+    this.roundScores = roundScores;
+  }
   public void setHands(List<List<Card>> hands) {
     this.hands = hands;
   }
   public void setTableCards(List<Card> tableCards) {
     this.tableCards = tableCards;
+  }
+  public void setCurrentPlayer(int currentPlayer) {
+    this.currentPlayer = currentPlayer;
   }
 }

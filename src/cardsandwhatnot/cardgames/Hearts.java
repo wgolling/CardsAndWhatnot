@@ -181,11 +181,12 @@ public class Hearts extends CardGame {
   @Override
   void setupPlay(){
     //diagnostic info
-    System.out.println("Hearts bled:" + heartsBled);
-    System.out.println("Trick suit:" + trickSuit);
-    System.out.println("Trick over?:" + trickOver);
-    System.out.println("Round over?:" + roundOver);
-    System.out.println("Game over?:" + gameOver);
+    System.out.println("Hearts bled:    " + heartsBled);
+    System.out.println("Trick suit:     " + trickSuit);
+    System.out.println("Trick over?:    " + trickOver);
+    System.out.println("Round over?:    " + roundOver);
+    System.out.println("Game over?:     " + gameOver);
+    System.out.println("Current Player: " + currentPlayer);
   }
   /**
    * After a card has been played it is placed on the table, 
@@ -220,7 +221,7 @@ public class Hearts extends CardGame {
     firstTrick = false;
     // determine the winner
     int winner = leadPlayer;
-    for (int i=0; i<players.size(); i++) {
+    for (int i=0; i < players.size(); i++) {
       if (tableCards.get(i).getSuit() == tableCards.get(winner).getSuit()
        && tableCards.get(i).compareTo(tableCards.get(winner)) > 0){
         winner = i;

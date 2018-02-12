@@ -72,7 +72,7 @@ public class HandTest {
   public void testGetCards() {
     System.out.println("getCards");
     Hand instance = new Hand(Arrays.asList(ACE_OF_SPADES, TWO_OF_CLUBS, QUEEN_OF_HEARTS));
-    StandardCard.Suit expResult = StandardCard.Suit.CLUBS;
+    StandardCard.Suit expResult = StandardCard.Suit.SPADES;
     StandardCard.Suit result = (StandardCard.Suit)instance.getCards().get(1).getSuit();
     assertEquals(expResult, result);
   }
@@ -99,7 +99,7 @@ public class HandTest {
     List<Card> otherCards = Arrays.asList(QUEEN_OF_HEARTS, TWO_OF_CLUBS);
     Hand instance = new Hand(Arrays.asList(ACE_OF_SPADES));
     instance.addCards(otherCards);
-    StandardCard.Suit expResult = StandardCard.Suit.CLUBS;
+    StandardCard.Suit expResult = StandardCard.Suit.HEARTS;
     StandardCard.Suit result = (StandardCard.Suit)instance.getCards().get(2).getSuit();
     assertEquals(expResult, result);
   }
@@ -112,15 +112,13 @@ public class HandTest {
     System.out.println("removeCards");
     Hand instance = new Hand(Arrays.asList(ACE_OF_SPADES, TWO_OF_CLUBS, QUEEN_OF_HEARTS));
     List<Card> subCards = Arrays.asList(QUEEN_OF_HEARTS, ACE_OF_SPADES);
-    boolean expResult = true;
-    boolean result = instance.removeCards(subCards);
-    assertEquals(expResult, result);
+    subCards = instance.removeCards(subCards);
+    assert( ACE_OF_SPADES.equals(subCards.get(1)) );
     StandardCard.Suit suit = StandardCard.Suit.CLUBS;
     ValueTextEnum test = instance.getCards().get(0).getSuit();
     assertEquals(suit, test);
-    expResult = false;
-    result = instance.removeCards(subCards);
-    assertEquals(expResult, result);
+    subCards = instance.removeCards(subCards);
+    assertNull(subCards);
     }
 
   /**
