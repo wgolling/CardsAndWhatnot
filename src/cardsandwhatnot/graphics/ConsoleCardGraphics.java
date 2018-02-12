@@ -21,10 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package cardsandwhatnot.io.console;
+package cardsandwhatnot.graphics;
 
 import cardsandwhatnot.lib.Card;
-import cardsandwhatnot.io.*;
 import java.util.*;
 
 /**
@@ -411,7 +410,6 @@ public class ConsoleCardGraphics implements GraphicsEngine {
   @Override
   public void drawTrickResults() {
     buildTableView();
-    System.out.println("DrawTrickResults, current player: " + data.getCurrentPlayer());
     Direction winner = Direction.intToDirection(data.getCurrentPlayer()+1);
     canvas.pinContentToLayer(winner.arrowBox(), "TABLE", CENTRE[0], CENTRE[1]);
     System.out.println(produceOutput());

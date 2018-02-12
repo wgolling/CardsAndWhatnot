@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package cardsandwhatnot.cardgames;
+package cardsandwhatnot.games;
 
 import cardsandwhatnot.lib.*;
 import java.util.*;
@@ -180,13 +180,13 @@ public class Hearts extends CardGame {
    */
   @Override
   void setupPlay(){
-    //diagnostic info
-    System.out.println("Hearts bled:    " + heartsBled);
-    System.out.println("Trick suit:     " + trickSuit);
-    System.out.println("Trick over?:    " + trickOver);
-    System.out.println("Round over?:    " + roundOver);
-    System.out.println("Game over?:     " + gameOver);
-    System.out.println("Current Player: " + currentPlayer);
+//    //diagnostic info
+//    System.out.println("Hearts bled:    " + heartsBled);
+//    System.out.println("Trick suit:     " + trickSuit);
+//    System.out.println("Trick over?:    " + trickOver);
+//    System.out.println("Round over?:    " + roundOver);
+//    System.out.println("Game over?:     " + gameOver);
+//    System.out.println("Current Player: " + currentPlayer);
   }
   /**
    * After a card has been played it is placed on the table, 

@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package cardsandwhatnot.cardgames;
+package cardsandwhatnot.games;
 
+import cardsandwhatnot.games.Hearts;
 import cardsandwhatnot.lib.Card;
 import cardsandwhatnot.lib.StandardCard;
 import org.junit.After;

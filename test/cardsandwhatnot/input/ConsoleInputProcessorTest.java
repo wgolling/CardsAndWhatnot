@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package cardsandwhatnot.io.console;
+package cardsandwhatnot.input;
 
+import cardsandwhatnot.input.ConsoleInputProcessor;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

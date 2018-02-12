@@ -21,8 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package cardsandwhatnot.io.console;
+package cardsandwhatnot.graphics;
 
+import cardsandwhatnot.graphics.LayeredCharCanvas;
+import cardsandwhatnot.graphics.ConsoleCardGraphics;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

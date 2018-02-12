@@ -23,10 +23,12 @@
  */
 package cardsandwhatnot;
 
-import cardsandwhatnot.cardgames.*;
-import cardsandwhatnot.io.console.*;
+import cardsandwhatnot.games.Hearts;
+import cardsandwhatnot.games.CardGameEngine;
+import cardsandwhatnot.input.ConsoleInputProcessor;
+import cardsandwhatnot.graphics.ConsoleCardGraphics;
 import cardsandwhatnot.lib.*;
-import cardsandwhatnot.io.DisplayData;
+import cardsandwhatnot.graphics.DisplayData;
 import java.util.*;
 import java.util.stream.*;
 

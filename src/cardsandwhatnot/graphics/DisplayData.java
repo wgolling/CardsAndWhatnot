@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package cardsandwhatnot.io;
+package cardsandwhatnot.graphics;
 
 import cardsandwhatnot.lib.Card;
 import java.util.*;

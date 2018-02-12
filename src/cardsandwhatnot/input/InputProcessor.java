@@ -21,17 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package cardsandwhatnot.io;
+package cardsandwhatnot.input;
 
 /**
  *
  * @author William Gollinger
  */
-public interface GraphicsEngine {
-  void setData(DisplayData data);
-  void drawTable();
-  void drawCardPrompt();
-  void drawTrickResults();
-  void drawRoundResults();
-  void drawGameResults();
+/**
+ * The role of the InputProcessor is to properly format raw user input.
+ * Inputs and Outputs are Strings for generality.  The processor should either
+ *    return a valid id for an appropriate object, or null if none exist.
+*/
+public interface InputProcessor {
+  String[] promptCard(String message);
+  String   promptGame(String message);
+  String   promptPlayer(String message);
+  void     promptContinue(String message);
 }

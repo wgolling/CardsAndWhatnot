@@ -21,15 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package cardsandwhatnot.cardgames;
+package cardsandwhatnot.games;
 
-import java.util.List;
+import cardsandwhatnot.graphics.DisplayData;
+import cardsandwhatnot.lib.*;
+import cardsandwhatnot.graphics.GraphicsEngine;
+import cardsandwhatnot.input.InputProcessor;
 import java.util.stream.*;
-
-import cardsandwhatnot.io.*;
-import cardsandwhatnot.lib.Card;
-import cardsandwhatnot.lib.Player;
-import cardsandwhatnot.lib.StandardCard;
 
 /**
  *
@@ -65,7 +63,6 @@ public class CardGameEngine {
           game.resolvePlay(play);
         } while(game.trickOver == false);
         game.resolveTrick();
-        System.out.println("Trick resolved, current player: " + game.currentPlayer);
         promptTrickOver("Trick Over\n");
       } while(game.roundOver == false); // If roundOver always true, each "Round" only has one Play.
       game.resolveRound();

@@ -21,13 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package cardsandwhatnot.io.console;
+package cardsandwhatnot.input;
 
 import java.util.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import cardsandwhatnot.io.InputProcessor;
 
 /**
  * The ConsoleUnputProcessor only deals with strings.
