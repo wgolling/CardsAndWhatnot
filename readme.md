@@ -22,6 +22,6 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 ## TODO
 
 * add "Main Menu" where users can choose number of human players, make new players, load saved players, etc.
-* generalize enough so that Uno can be played: maybe cut specific code out of ConsoleCardGraphics and use it to define the subclass HeartsGraphics
-* turn LayeredCharCanvas into LayeredCanvas<T>, learn how to write a GUI
+* generalize enough so that Uno can be played: maybe cut specific code out of ConsoleCardGraphics and use it to define the subclass HeartsGraphics, then make branching extension UnoGraphics
+* turn LayeredCharCanvas into LayeredCanvas\<T\>, learn how to write a GUI
 * general clean-up, write tests, comments, etc. 
