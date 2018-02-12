@@ -23,11 +23,8 @@
  */
 package cardsandwhatnot.cardgames;
 
-import cardsandwhatnot.io.DisplayData;
 import java.util.*;
 import cardsandwhatnot.lib.*;
-import cardsandwhatnot.io.CardGameUI;
-import java.util.stream.Collectors;
 
 /**
  *
@@ -47,7 +44,6 @@ public class CardGame {
   boolean roundOver;
   boolean gameOver;
   
-  CardGameUI UI;
   
   public CardGame(List<Player> players) {
     name = "BLANK";
@@ -71,35 +67,6 @@ public class CardGame {
   List<Player> getPlayers() {return players;}
   int getCurrentPlayer() {return currentPlayer;}
     
-  // move these two to GameEngine?
-  // returns a valid card, according to the game's validatePlay method
-  Card requestCard(Player player) {
-    Card card = null;
-    if (player.isHuman()) {
-      card = UI.promptCard();
-      while (!validatePlay(card)) {
-        card = UI.promptCard();
-      }
-    } else {
-      defaultCard();
-    }
-    return card;
-  }
-  // The CardGame is played by calling its run() method. 
-  public void run() {
-    setupGame();
-    while (!gameOver) {
-      setupRound();
-      do {
-        setupPlay();
-        Card play = requestCard(players.get(currentPlayer));
-        resolvePlay(play);
-      } while(!roundOver); // If roundOver always true, each "Round" only has one Play.
-      resolveRound();
-    }
-    resolveGame(); 
-    // display final results
-  }
   /* 
   * To write new CardGame, just have to override the methods below.
   * If your game has no rounds then set roundOver = true in your initializer,

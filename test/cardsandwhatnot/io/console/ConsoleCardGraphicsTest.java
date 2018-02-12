@@ -26,7 +26,6 @@ package cardsandwhatnot.io.console;
 import cardsandwhatnot.lib.Card;
 import cardsandwhatnot.lib.StandardCard;
 import cardsandwhatnot.lib.StandardDeck;
-import cardsandwhatnot.GameEngine;
 import java.util.*;
 import org.junit.After;
 import org.junit.Before;
@@ -50,7 +49,7 @@ public class ConsoleCardGraphicsTest {
   char[][] testCanvas;
   
   public ConsoleCardGraphicsTest() {
-    graphics = new ConsoleCardGraphics(GameEngine.MIN_HEIGHT, GameEngine.MIN_WIDTH);
+    graphics = new ConsoleCardGraphics();
     this.CARD_HEIGHT = graphics.CARD_HEIGHT;
     this.CARD_WIDTH = graphics.CARD_WIDTH;
     ACE_OF_SPADES = new StandardCard(StandardCard.Rank.ACE, StandardCard.Suit.SPADES);
@@ -66,7 +65,7 @@ public class ConsoleCardGraphicsTest {
     
   @Before
   public void setUp() {
-    graphics = new ConsoleCardGraphics(GameEngine.MIN_HEIGHT, GameEngine.MIN_WIDTH);
+    graphics = new ConsoleCardGraphics();
     testCanvas = new char[50][50];
   }
   

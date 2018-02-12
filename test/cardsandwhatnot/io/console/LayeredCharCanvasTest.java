@@ -30,7 +30,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import cardsandwhatnot.GameEngine;
 
 /**
  *
@@ -45,7 +44,8 @@ public class LayeredCharCanvasTest {
   final char[][] DOT;
   
   public LayeredCharCanvasTest() {
-    testCanvas = new LayeredCharCanvas(GameEngine.MIN_HEIGHT, GameEngine.MIN_WIDTH);
+    testCanvas = new LayeredCharCanvas(ConsoleCardGraphics.WINDOW_HEIGHT, 
+                                       ConsoleCardGraphics.WINDOW_WIDTH);
     testCanvas.addLayer("TEST");
     TEST_CONTENT = new char[9][9];
     for (int i=0; i<3; i++) {
@@ -68,7 +68,8 @@ public class LayeredCharCanvasTest {
   
   @Before
   public void setUp() {
-    testCanvas = new LayeredCharCanvas(GameEngine.MIN_HEIGHT, GameEngine.MIN_WIDTH);
+    testCanvas = new LayeredCharCanvas(ConsoleCardGraphics.WINDOW_HEIGHT, 
+                                       ConsoleCardGraphics.WINDOW_WIDTH);
     testCanvas.addLayer("TEST");
     testBox = testCanvas.new Box(TEST_CONTENT, "TEST_BOX");
   }

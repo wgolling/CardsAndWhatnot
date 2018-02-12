@@ -21,12 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package cardsandwhatnot.io.console;
+package cardsandwhatnot.cardgames;
 
 /**
  *
  * @author William Gollinger
  */
-public class ConsoleHeartsUI {
+public class Uno {
   
 }

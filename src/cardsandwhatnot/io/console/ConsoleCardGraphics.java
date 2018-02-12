@@ -72,6 +72,9 @@ public class ConsoleCardGraphics implements GraphicsEngine {
   // card dimensions
   final int CARD_HEIGHT = 6;
   final int CARD_WIDTH = 5;
+  // minimum/default window dimensions
+  static final int WINDOW_HEIGHT = 40;
+  static final int WINDOW_WIDTH  = 125;
   // basic "graphic" elements
   final char TOP_BORDER = '-';
   final char SIDE_BORDER = '|';
@@ -99,7 +102,13 @@ public class ConsoleCardGraphics implements GraphicsEngine {
    * @param windowHeight
    * @param windowWidth 
    */    
+  public ConsoleCardGraphics() {
+    this(0, 0);
+  }
   public ConsoleCardGraphics(int windowHeight, int windowWidth) {
+    // Force the dimensions to be at least the minimum.
+    windowHeight = Math.max(windowHeight, WINDOW_HEIGHT);
+    windowWidth = Math.max(windowWidth, WINDOW_WIDTH);
     // Construct canvas with named layers.
     canvas = new LayeredCharCanvas(windowHeight, windowWidth);
     canvas.addLayer("BACKGROUND");

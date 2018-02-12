@@ -40,26 +40,21 @@ public class CardsAndWhatnot {
    * @param args the command line arguments
    */
   public static void main(String[] args) {
-    // Make players.
-    Player burt = new Player("Burt", "", false);
-    Player doug = new Player("Doug", "", false);
+    Player burt     = new Player("Burt", "", true);
+    Player doug     = new Player("Doug", "", false);
     Player alphonse = new Player("Alphonse", "", false);
-    Player terry = new Player("Terry", "", false);
-    // Set up player lists.
-    List<Player> players = Arrays.asList(burt, doug, alphonse, terry);
+    Player terry    = new Player("Terry", "", false);
+    List<Player> players     = Arrays.asList(burt, doug, alphonse, terry);
     List<String> playerNames = players.stream().map(e -> e.getName()).collect(Collectors.toList());
-    // Set up games list.
-    List<String> gameNames = Arrays.asList("HEARTS");
-    // Set up graphics and input.
-    ConsoleCardGraphics graphics = new ConsoleCardGraphics(40, 125);
-    ConsoleInputProcessor input = new ConsoleInputProcessor(gameNames, playerNames);
-    // Load game with players.
+    List<String> gameNames   = Arrays.asList("HEARTS", "UNO");
+    ConsoleCardGraphics graphics = new ConsoleCardGraphics();
+    ConsoleInputProcessor input  = new ConsoleInputProcessor(gameNames, playerNames);
     Hearts hearts = new Hearts(players);
-    // Load game engine with game and graphics + input.
     CardGameEngine engine = new CardGameEngine(hearts, graphics, input);
     engine.playGame();
   }
   
+  // Test method for playing with graphics
   static void trySomeGraphics() {
     ConsoleCardGraphics graphics = new ConsoleCardGraphics(40,125);
     StandardDeck deck = new StandardDeck();
