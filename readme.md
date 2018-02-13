@@ -25,7 +25,7 @@ This project is licensed under the MIT License
 
 * Fix Bugs.
 * Add "Main Menu" where users can choose number of human players, make new players, load saved players, etc.
-* Finish Round Over and Game Over screens, replay prompt.
+* Improve user experience.
 * Generalize enough so that Uno can be played: maybe cut specific code out of ConsoleCardGraphics and use it to define the subclass HeartsGraphics, then make branching extension UnoGraphics.
 * Turn LayeredCharCanvas into LayeredCanvas\<T\>, learn how to write a GUI.
-* General clean-up, write tests, comments, etc. 
+* General clean-up, comments, etc. 
