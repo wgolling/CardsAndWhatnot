@@ -40,6 +40,8 @@ public class DisplayData {
   List<List<Card>> takenCards;
   List<Card>       tableCards; 
   int currentPlayer;
+  int leadPlayer;
+  List<Integer> winners;
   
   public DisplayData(List<String> players, List<String> scores, 
                      List<List<Card>> hands, List<Card> tableCards ) {
@@ -75,6 +77,12 @@ public class DisplayData {
   public int getCurrentPlayer() {
     return currentPlayer;
   }
+  public int getLeadPlayer() {
+    return leadPlayer;
+  }
+  public List<Integer> getWinners() {
+    return new ArrayList<>(winners);
+  }
   // special getter methods => non-public fields => setter methods
   public void setPlayers(List<String> players) {
     this.players = players;
@@ -93,5 +101,11 @@ public class DisplayData {
   }
   public void setCurrentPlayer(int currentPlayer) {
     this.currentPlayer = currentPlayer;
+  }
+  public void setLeadPlayer(int leadPlayer) {
+    this.leadPlayer = leadPlayer;
+  }
+  public void setWinners(List<Integer> winners) {
+    this.winners = winners;
   }
 }

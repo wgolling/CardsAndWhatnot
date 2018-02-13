@@ -26,7 +26,6 @@ package cardsandwhatnot.graphics;
 import cardsandwhatnot.graphics.ConsoleCardGraphics;
 import cardsandwhatnot.lib.Card;
 import cardsandwhatnot.lib.StandardCard;
-import cardsandwhatnot.lib.StandardDeck;
 import java.util.*;
 import org.junit.After;
 import org.junit.Before;

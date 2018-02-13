@@ -7,6 +7,8 @@ Basic cards game; my first large-ish coding project and first Java project.  Cur
 Download CardsAndWhatnot.jar from the /dist/ folder and run the console command  
 java -jar "CardsAndWhatnot.jar" 
 
+Make sure your console window is large enough, otherwise the content won't display properly.
+
 ### Prerequisites
 
 Needs I think at least Java 8.

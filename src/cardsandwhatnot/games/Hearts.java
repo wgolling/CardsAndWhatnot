@@ -36,14 +36,15 @@ public class Hearts extends CardGame {
   Card QUEEN_OF_SPADES = new StandardCard(StandardCard.Rank.QUEEN, StandardCard.Suit.SPADES);
   Card TWO_OF_CLUBS = new StandardCard(StandardCard.Rank.TWO, StandardCard.Suit.CLUBS);
   ValueTextEnum HEARTS = StandardCard.Suit.HEARTS;
+  ValueTextEnum[] nonHearts = new StandardCard.Suit[]{StandardCard.Suit.SPADES,
+                                                      StandardCard.Suit.CLUBS,
+                                                      StandardCard.Suit.DIAMONDS};
   ValueTextEnum trickSuit;
-  List<Integer> roundScores;
   List<Hand> takenCards;
-  int leadPlayer=0;
   boolean firstTrick = true;
   boolean heartsBled = false;
   final static int MAX_SCORE = 100;
-  
+
   public Hearts(List<Player> players) {
     super(players);
     name = "HEARTS";
@@ -113,16 +114,26 @@ public class Hearts extends CardGame {
   @Override
   Card defaultCard() {
     Hand hand = hands.get(currentPlayer);
-    // TODO choose random suit
-    if (currentPlayer == leadPlayer) {
-      return hand.getCards().get(0);
-    } else if (hand.hasSuit(trickSuit)) {
-      return hand.getLast(trickSuit);
-    } else if (hand.hasSuit(HEARTS)) {
-      return hand.getLast(HEARTS);
-    } else {
-      return hand.getCards().get(0);
+    if (hand.getCards().get(0).equals(TWO_OF_CLUBS)) {
+      return TWO_OF_CLUBS;
     }
+    ValueTextEnum suit;
+    // if you lead, choose a random suit and play the smallest card
+    if (currentPlayer == leadPlayer) {
+      suit = hand.randomSuit( (heartsBled) ? null : nonHearts );
+      return hand.getFirst(suit);
+    }
+    // otherwise, if you have the correct suit, play largest
+    if (hand.hasSuit(trickSuit)) {
+      return hand.getLast(trickSuit);
+    }
+    // otherwise, if have hearts play largest
+    if (hand.hasSuit(HEARTS)) {
+      return hand.getLast(HEARTS);
+    }
+    // otherwise, choose random suit and play largest
+    suit = hand.randomSuit( (heartsBled) ? null : nonHearts );
+    return hand.getLast(suit);    
   }
   /**
    * At the start of the Game, the scores are zeroed.
@@ -174,6 +185,8 @@ public class Hearts extends CardGame {
     //reset table cards
     tableCards = new ArrayList<>();
     forEachPlayer(() -> tableCards.add(null));
+    // set player
+    currentPlayer = leadPlayer;
   }
   /**
    * At the start of a play nothing special happens.
@@ -229,7 +242,7 @@ public class Hearts extends CardGame {
     }
     // distribute table cards and set leadPlayer
     takenCards.get(winner).addCards(tableCards);
-    currentPlayer = leadPlayer = winner;
+    leadPlayer = winner;
     // if noone has cards left, the round is over
     if(hands.get(currentPlayer).size() == 0) {
       roundOver = true;
@@ -264,7 +277,7 @@ public class Hearts extends CardGame {
     }
     // if someone's score is over the threshold, the game is over
     for (int j : scores) {
-      if (j > MAX_SCORE) {
+      if (j >= MAX_SCORE) {
         gameOver = true;
       }
     }
@@ -297,14 +310,14 @@ public class Hearts extends CardGame {
       }
     }
     // Make list of players with winning score, increment their wins.
-    List<Player> winners = new ArrayList<>();
+    winners = new ArrayList<>();
     for (int i=0; i < players.size(); i++) {
       if (scores.get(i).equals(scores.get(winner))) {
-        winners.add(players.get(i));
+        winners.add(i);
       }
     }
-    for (Player player : winners) {
-      player.winGame(name);
+    for (Integer player : winners) {
+      players.get(player).winGame(name);
     }
   }
 }

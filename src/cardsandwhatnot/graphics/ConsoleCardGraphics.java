@@ -410,7 +410,10 @@ public class ConsoleCardGraphics implements GraphicsEngine {
   @Override
   public void drawTrickResults() {
     buildTableView();
-    Direction winner = Direction.intToDirection(data.getCurrentPlayer()+1);
+    Direction current = Direction.intToDirection(data.getCurrentPlayer()+1);
+    int numberOfCards = data.getHands().get(current.player-1).size();
+    hands.get(current).setContent(makeHiddenHand(numberOfCards));
+    Direction winner = Direction.intToDirection(data.getLeadPlayer()+1);
     canvas.pinContentToLayer(winner.arrowBox(), "TABLE", CENTRE[0], CENTRE[1]);
     System.out.println(produceOutput());
   }
@@ -419,14 +422,27 @@ public class ConsoleCardGraphics implements GraphicsEngine {
     buildTableView();
     // TODO? show taken cards
     for (Direction direction :  Direction.values()) {
-      String score = data.getScores().get(direction.player - 1);
+      String score = data.getRoundScores().get(direction.player - 1);
       tableCards.get(direction).setContent(makeString(score));
     }
     System.out.println(produceOutput());
   }
   @Override
   public void drawGameResults() {
-    // indicate winner
+    buildTableView();
+    for (Direction direction : Direction.values()) {
+      tableCards.get(direction).setContent(new char[1][1]);
+    }
+    String winners = "";
+    for (Integer i : data.getWinners()) {
+      winners += " " + data.getPlayers().get(i);
+      tableCards.get(Direction.intToDirection(i+1)).setContent(makeString("Winner!"));
+    }
     System.out.println(produceOutput());
+    String preface = "Winners:";
+    if (data.getWinners().size() == 1) {
+      preface = "Winner:";
+    }
+    System.out.println(preface + winners);
   }
 }

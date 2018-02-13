@@ -77,14 +77,19 @@ public class CardGameEngine {
    * the same object.
    */
   void updateData() {
+    // TODO: rewrite with a generic helper method that takes a List<E> and a lambda
     data.setPlayers(game.players
             .stream().map(e -> e.getName()).collect(Collectors.toList()) );   // java y u no hav succinct functional operations
     data.setScores(game.scores
+            .stream().map(e -> Integer.toString(e)).collect(Collectors.toList()) );
+    data.setRoundScores(game.roundScores
             .stream().map(e -> Integer.toString(e)).collect(Collectors.toList()) );
     data.setHands(game.players
             .stream().map(e -> e.getHand().getCards() ).collect(Collectors.toList()) );
     data.setTableCards(game.tableCards);
     data.setCurrentPlayer(game.currentPlayer);
+    data.setLeadPlayer(game.leadPlayer);
+    data.setWinners(game.winners);
   }
   /**
    * Returns a card from the Player's hand, which is valid according to

@@ -75,9 +75,12 @@ public class ConsoleInputProcessor implements InputProcessor {
   @Override
   public String[] promptCard(String extraMessage) {
     String s = prompt(extraMessage + "\nEnter Card with format 'Rank Suit':");
-    String[] cardParts = s.split(" ");
-    cardParts = parseCard(cardParts);
     String newMessage = "";
+    String[] cardParts = s.split(" ");
+    if (cardParts.length != 2) {
+      return promptCard("\nIncorrect format.");
+    }
+    cardParts = parseCard(cardParts);
     if (cardParts[0] == null) {
       newMessage += "\nRank not recognized.";
     }
@@ -193,9 +196,13 @@ public class ConsoleInputProcessor implements InputProcessor {
     switch (input.toUpperCase()) {
       // Standard Suits
       case "HEARTS"  : return "Hearts";
+      case "H"       : return "Hearts";
       case "SPADES"  : return "Spades";
+      case "S"       : return "Spades";
       case "CLUBS"   : return "Clubs";
+      case "C"       : return "Clubs";
       case "DIAMONDS": return "Diamonds";
+      case "D"       : return "Diamonds";
       // Uno Suits
       case "RED"    : return "Red";
       case "BLUE"   : return "Blue";

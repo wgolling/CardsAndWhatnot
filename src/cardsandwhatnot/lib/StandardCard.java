@@ -54,6 +54,15 @@ public class StandardCard implements Card {
     public String symbol() {
       return symbol;
     }
+    static public Suit intToSuit(int i) {
+      switch (i) {
+        case 1  : return CLUBS;
+        case 2  : return DIAMONDS;
+        case 3  : return SPADES;
+        case 4  : return HEARTS;
+        default : return null;
+      }
+    }
   }
   public enum Rank implements ValueTextEnum {
     TWO   (2,  "Two",   "2"),  

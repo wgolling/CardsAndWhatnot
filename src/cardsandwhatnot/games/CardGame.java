@@ -37,12 +37,15 @@ public class CardGame {
   List<Player> players;
   List<Hand> hands;
   List<Integer> scores;
+  List<Integer> roundScores;
   int currentPlayer;
+  int leadPlayer=0;
   public Deck gameDeck;
   List<Card> tableCards;
   boolean trickOver;
   boolean roundOver;
   boolean gameOver;
+  List<Integer> winners;
   
   
   public CardGame(List<Player> players) {
@@ -59,6 +62,7 @@ public class CardGame {
     gameDeck = null; // Should be set by game; e.g. Hearts and Uno use different decks.
     tableCards = new ArrayList<>();
     trickOver = roundOver = gameOver = true; 
+    winners = new ArrayList<>();
   }
   @Override
   public String toString() {return name;}

@@ -89,6 +89,7 @@ public class Hand {
     }
     return false;
   }
+  
   public boolean hasRank(ValueTextEnum rank){
     for (Card card : cards) {
       if (card.getRank() == rank) {
@@ -124,4 +125,64 @@ public class Hand {
     }
     return cards.get(cards.size()-1);
   }
+  public ValueTextEnum randomSuit(ValueTextEnum[] filterSuits) {
+    if (cards.isEmpty()) {
+      return null;
+    }
+    List<Integer> indices = new ArrayList<>();
+    ValueTextEnum dummySuit = null;
+    for (int i=0; i < cards.size(); i++) {
+      if ( dummySuit != cards.get(i).getSuit()) {
+        dummySuit = cards.get(i).getSuit();
+        if (searchFilter(filterSuits, cards.get(i).getSuit())) {
+          indices.add(i);
+        }
+      }
+    }
+    Random rand = new Random();
+    int index = indices.get(rand.nextInt(indices.size()));
+    return cards.get(index).getSuit();
+  }
+  private boolean searchFilter(ValueTextEnum[] filter, ValueTextEnum test) {
+    if (filter == null || filter.length == 0) {
+      return true;
+    }
+    for (ValueTextEnum e : filter) {
+      if (e == test) {
+        return true;
+      }
+    }
+    return false;
+  }
+  public ValueTextEnum randomSuit() {
+    return randomSuit(new ValueTextEnum[0]);
+  }
+  public Card randomCard() {
+    Random rand = new Random();
+    int i = rand.nextInt(cards.size());
+    return cards.get(i);
+  }
+  public Card randomCard(ValueTextEnum[] suits) {
+    return filterBySuit(suits).randomCard();
+  }
+  public Card randomCard(ValueTextEnum suit) {
+    return randomCard(new ValueTextEnum[]{suit});
+  }
+  /**
+   * Makes a subhand containing the given suits.
+   * @param suits
+   * @return 
+   */
+  Hand filterBySuit(ValueTextEnum[] suits) {
+    Hand subhand = new Hand();
+    for (ValueTextEnum suit : suits) {
+      for (Card card : cards) {
+        if (card.getSuit() == suit) {
+          subhand.addCard(card);
+        }
+      }
+    }
+    return subhand;
+  }
+  
 }
